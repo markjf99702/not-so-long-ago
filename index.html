@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Not So Long Ago</title>
+<meta name="description" content="Lay LGBTQ+ history across your own life and the lives of the people you love, and see how recently it all changed.">
+<meta property="og:title" content="Not So Long Ago">
+<meta property="og:description" content="LGBTQ+ history, laid across your life and your family's. How old were you when it stopped being a crime?">
+<meta property="og:image" content="https://junkdrawer.works/not-so-long-ago/og.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#F4F2F7">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231D1824'/%3E%3Crect x='5' y='6' width='22' height='3' rx='1.5' fill='%23E5484D'/%3E%3Crect x='9' y='11' width='18' height='3' rx='1.5' fill='%23F08A3C'/%3E%3Crect x='12' y='16' width='15' height='3' rx='1.5' fill='%23E8B923'/%3E%3Crect x='16' y='21' width='11' height='3' rx='1.5' fill='%233FAE6A'/%3E%3Crect x='21' y='26' width='6' height='3' rx='1.5' fill='%234C86E0'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Big+Shoulders+Text:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --paper:#F4F2F7; --panel:#EAE6F0; --ink:#1D1824; --ink-2:#463F52; --muted:#6C657B; --rule:#D6D0DF; --grid:#E3DEEA;
+  --accent:#6B3FA6; --accent-ink:#FFFFFF; --accent-soft:#E4D9F3;
+  --bar:#241D2E; --bar-part:#9A91A8;
+  --p0:#D7263D; --p1:#E46C12; --p2:#C99400; --p3:#23904A; --p4:#2A62C2; --p5:#7B3FA8;
+  --display:"Big Shoulders Display","Arial Narrow","Roboto Condensed",Impact,sans-serif;
+  --ui:"Big Shoulders Text","Arial Narrow","Roboto Condensed",system-ui,sans-serif;
+  --serif:"Source Serif 4","Source Serif Pro",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#15121B; --panel:#211B2A; --ink:#EEEAF4; --ink-2:#CBC4D8; --muted:#9C94AD; --rule:#382F45; --grid:#29222F;
+    --accent:#BC98F2; --accent-ink:#1A1422; --accent-soft:#35284A;
+    --bar:#DCD4E8; --bar-part:#6D6480;
+    --p0:#FF5B69; --p1:#FF9447; --p2:#F2C12E; --p3:#4CC477; --p4:#6A9CF5; --p5:#B884EC;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#15121B; --panel:#211B2A; --ink:#EEEAF4; --ink-2:#CBC4D8; --muted:#9C94AD; --rule:#382F45; --grid:#29222F;
+  --accent:#BC98F2; --accent-ink:#1A1422; --accent-soft:#35284A;
+  --bar:#DCD4E8; --bar-part:#6D6480;
+  --p0:#FF5B69; --p1:#FF9447; --p2:#F2C12E; --p3:#4CC477; --p4:#6A9CF5; --p5:#B884EC;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 var(--serif);padding-inline:16px;padding-block:0 64px}
+[hidden]{display:none!important}
+a{color:var(--accent)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1000px;margin:0 auto}
+
+/* Masthead */
+.mast{padding-block:28px 8px;display:grid;gap:10px}
+.mast h1{font:900 clamp(46px,11vw,96px)/.86 var(--display);text-transform:uppercase;letter-spacing:.005em;margin:0;text-wrap:balance}
+.mast h1 span{display:block}
+.mast p{margin:0;max-width:40em;color:var(--ink-2);font-size:clamp(17px,2.2vw,20px)}
+
+/* People */
+.people{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-block:18px 6px}
+.chip{display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--rule);background:var(--paper);border-radius:999px;padding:6px 14px 6px 8px;font:600 17px/1.2 var(--ui);letter-spacing:.01em;cursor:pointer}
+.chip:hover{border-color:var(--ink-2)}
+.chip .sw{width:22px;height:10px;border-radius:3px;flex:none}
+.chip small{font:400 13px/1 var(--mono);color:var(--muted);letter-spacing:0}
+.chip.add{border-style:dashed;color:var(--accent);padding-left:14px}
+.chip.add:disabled{opacity:.45;cursor:default}
+.people-note{flex-basis:100%;font:400 13px/1.4 var(--mono);color:var(--muted)}
+
+.starter{margin-block:6px 4px;background:var(--panel);border-radius:10px;padding:14px 16px;display:grid;gap:10px}
+.starter p{margin:0;font-size:16px}
+.starter form{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
+.field{display:grid;gap:4px}
+.field label{font:600 13px/1 var(--ui);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.field input,.field select{border:1.5px solid var(--rule);background:var(--paper);border-radius:8px;padding:9px 10px;font:500 16px/1.2 var(--mono);min-width:0}
+.field select{font:600 17px/1.2 var(--ui);letter-spacing:.01em}
+.field input[type=number]{width:7.5em}
+.field input[type=text]{width:12em}
+.field select{max-width:15em}
+.btn{border:0;background:var(--accent);color:var(--accent-ink);border-radius:8px;padding:10px 16px;font:700 17px/1.1 var(--ui);letter-spacing:.03em;cursor:pointer}
+.btn.quiet{background:transparent;color:var(--accent);border:1.5px solid var(--rule)}
+.btn.danger{background:transparent;color:var(--p0);border:1.5px solid var(--rule)}
+
+/* Section heads */
+section{padding-block:26px 6px}
+.sec-h{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 16px;margin-bottom:12px;border-top:3px solid var(--ink);padding-top:10px}
+.sec-h h2{font:800 clamp(28px,5vw,40px)/1 var(--display);text-transform:uppercase;margin:0;letter-spacing:.01em}
+.sec-h p{margin:0;color:var(--muted);font-size:15px;max-width:34em}
+
+/* Chart */
+.chart-box{position:relative;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.chart-box svg{display:block;width:100%;height:auto;overflow:visible;cursor:ew-resize}
+.c-grid{stroke:var(--grid);stroke-width:1}
+.c-tick{fill:var(--muted);font:500 11px var(--mono)}
+.c-lane{fill:var(--ink);font:600 15px var(--ui);letter-spacing:.015em}
+.c-lane-sub{fill:var(--accent);font:600 13px var(--ui);letter-spacing:.02em}
+.c-name{fill:var(--ink);font:700 15px var(--ui)}
+.c-name-sub{fill:var(--muted);font:400 11px var(--mono)}
+.c-bar{fill:var(--bar)}
+.c-part{fill:url(#hatch)}
+.c-hatch{fill:var(--bar-part)}
+.c-track{fill:var(--grid)}
+.c-notch{fill:var(--paper);opacity:.75}
+.c-cursor{stroke:var(--accent);stroke-width:2}
+.c-cursor-pill{fill:var(--accent);stroke:var(--paper);stroke-width:4;paint-order:stroke}
+.c-cursor-txt{fill:var(--accent-ink);font:700 12px var(--mono)}
+.c-mark{stroke:var(--paper);stroke-width:2}
+.c-now{fill:var(--muted);font:500 11px var(--mono)}
+.scrub{display:flex;align-items:center;gap:12px;margin-top:10px}
+.scrub label{font:600 13px/1 var(--ui);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.scrub input[type=range]{flex:1;accent-color:var(--accent);min-width:0}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font:400 13px/1.3 var(--mono);color:var(--muted);margin-top:8px}
+.legend i{display:inline-block;width:18px;height:9px;border-radius:2px;vertical-align:-1px;margin-right:6px}
+.legend .k-full{background:var(--bar)}
+.legend .k-part{background:repeating-linear-gradient(45deg,var(--bar-part) 0 2px,transparent 2px 5px);outline:1px solid var(--bar-part)}
+.legend .k-thin{background:linear-gradient(var(--bar),var(--bar)) center/100% 4px no-repeat}
+.legend .k-dot{width:10px;height:10px;border-radius:50%;background:var(--p0)}
+
+/* Readout */
+.readout{margin-top:16px;background:var(--panel);border-radius:12px;padding:16px 18px 18px;display:grid;gap:12px}
+.ro-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px}
+.ro-year{font:900 52px/.9 var(--display);letter-spacing:.01em}
+.ro-cap{font:600 17px/1.2 var(--ui);color:var(--ink-2)}
+.ages{display:flex;flex-wrap:wrap;gap:6px 14px}
+.age{display:inline-flex;align-items:center;gap:6px;font:500 14px/1.2 var(--mono);white-space:nowrap}
+.age .dot{width:10px;height:10px;border-radius:50%;flex:none}
+.age.unborn{color:var(--muted)}
+.age.unborn .dot{background:transparent!important;border:1.5px solid currentColor}
+.ro-cols{display:grid;gap:14px 28px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.ro-cols h3{font:700 13px/1 var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+.ro-cols ul{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.ro-cols li{font-size:16px;line-height:1.4;padding-left:16px;position:relative}
+.ro-cols li::before{content:"";position:absolute;left:0;top:.5em;width:8px;height:8px;background:var(--bar);border-radius:1px}
+.ro-cols li.ro-ev::before{background:transparent;border:1.5px solid var(--ink-2);border-radius:50%}
+.ro-cols li .st{display:block;font:400 13px/1.45 var(--mono);color:var(--ink-2);margin-top:2px}
+.ro-empty{color:var(--muted);font-style:italic}
+
+/* Ages section */
+.headlines{display:grid;gap:10px;margin:0 0 18px;padding:0;list-style:none}
+.headlines li{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;font-size:clamp(17px,2.1vw,20px);line-height:1.4}
+.headlines .sw{width:8px;align-self:stretch;border-radius:2px}
+.table-scroll{overflow-x:auto;border-top:1px solid var(--rule)}
+table.ages-t{border-collapse:separate;border-spacing:0;width:100%}
+.ages-t th,.ages-t td{padding:9px 10px;border-bottom:1px solid var(--rule);text-align:left;vertical-align:baseline}
+.ages-t thead th{font:700 15px/1.15 var(--ui);letter-spacing:.02em;background:var(--paper);text-align:center}
+.ages-t thead th:first-child{text-align:left;vertical-align:bottom}
+.ages-t thead th .sw{display:block;width:100%;min-width:40px;height:6px;border-radius:2px;margin-bottom:6px}
+.ages-t thead th small{display:block;font:400 12px var(--mono);color:var(--muted);white-space:nowrap}
+.ages-t tbody th{font:600 16px/1.3 var(--serif);width:42%;min-width:9.5em;white-space:normal}
+.ages-t tbody th,.ages-t thead th:first-child{position:sticky;left:0;z-index:1;background:var(--paper)}
+.ages-t thead th:first-child{z-index:2}
+.ages-t tbody th small{display:block;font:400 12px/1.4 var(--mono);color:var(--muted);margin-top:2px}
+.ages-t td{font:800 30px/1 var(--display);font-variant-numeric:tabular-nums;text-align:center;min-width:58px}
+.ages-t td small{display:block;font:400 11px/1.3 var(--mono);color:var(--muted);margin-top:3px;letter-spacing:0}
+.ages-t td.unborn{color:var(--muted);font:400 12px/1.2 var(--mono);vertical-align:middle}
+@media (max-width:520px){
+  .ages-t th,.ages-t td{padding:8px 5px}
+  .ages-t td{min-width:44px;font-size:26px}
+  .ages-t tbody th{min-width:8.5em;padding-left:0}
+  .ages-t td.unborn{font-size:11px}
+}
+.foot{font:400 13px/1.5 var(--mono);color:var(--muted);margin-top:10px}
+
+/* Year by year */
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.fchip{border:1.5px solid var(--rule);background:var(--paper);border-radius:999px;padding:5px 12px;font:600 15px/1.1 var(--ui);letter-spacing:.02em;cursor:pointer;color:var(--ink-2)}
+.fchip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.tone-key{font:400 13px/1.4 var(--mono);color:var(--muted);margin:8px 0 14px;display:flex;flex-wrap:wrap;gap:4px 16px}
+.tone-key span{white-space:nowrap}
+.tone-key b{font-weight:400;color:var(--ink)}
+.tone-key b.up{color:var(--accent)}
+.years{display:grid;gap:0}
+.yr{display:grid;grid-template-columns:1fr;gap:8px 18px;padding-block:14px;border-top:1px solid var(--rule)}
+.yr-h{position:relative}
+.yr-h .y{font:800 34px/1 var(--display);letter-spacing:.01em;display:block}
+.yr-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
+.yr-h .ages{gap:3px 12px}
+.yr-h .age{font-size:12px}
+.evs{display:grid;gap:14px;margin:0;padding:0;list-style:none}
+.ev{display:grid;grid-template-columns:18px 1fr;gap:8px}
+.glyph{font:12px/1.9 var(--mono);color:var(--muted);text-align:center}
+.ev.up .glyph{color:var(--accent)}
+.ev.down .glyph{color:var(--ink)}
+.ev-meta{font:400 12px/1.4 var(--mono);color:var(--muted);letter-spacing:.01em}
+.ev-t{font:700 19px/1.2 var(--ui);letter-spacing:.01em;margin-top:1px}
+.ev p{margin:3px 0 0;font-size:16px;line-height:1.5;color:var(--ink-2);max-width:42em}
+.ev-note{margin-top:5px;font:400 13px/1.45 var(--mono);color:var(--ink);display:flex;gap:6px;align-items:baseline}
+.ev-note .dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex:none}
+.ev-note span{flex:1;min-width:0}
+.ev.state .ev-t::before{content:attr(data-st);font:500 11px/1 var(--mono);background:var(--accent-soft);color:var(--ink);border-radius:4px;padding:3px 6px;margin-right:8px;vertical-align:3px;letter-spacing:.02em}
+details.before{border-top:1px solid var(--rule);padding-block:12px}
+details.before summary{cursor:pointer;font:700 19px/1.2 var(--ui);letter-spacing:.02em;color:var(--ink-2)}
+details.before summary small{font:400 13px var(--mono);color:var(--muted);margin-left:6px}
+details.before[open] summary{margin-bottom:6px}
+.none{color:var(--muted);font-style:italic;padding-block:12px}
+.decades{display:flex;flex-wrap:wrap;gap:4px 14px;margin:0 0 10px;font:500 14px/1.6 var(--mono)}
+.decades a{color:var(--ink-2);text-decoration:none;border-bottom:1.5px solid var(--rule)}
+.decades a:hover{color:var(--accent);border-color:var(--accent)}
+.yr-h .y{background:none;border:0;padding:0;cursor:pointer;color:inherit;text-align:left}
+.yr-h .y:hover{color:var(--accent)}
+.yr{scroll-margin-top:12px}
+
+/* About */
+.about{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.about p{margin:0 0 10px;font-size:16px;color:var(--ink-2)}
+.about h3{font:700 19px/1.2 var(--ui);margin:0 0 6px;letter-spacing:.02em}
+.about ul{margin:0;padding-left:18px;font-size:15px;color:var(--ink-2)}
+.about li{margin-bottom:6px}
+.lane-notes dt{font:700 16px/1.3 var(--ui);letter-spacing:.02em;margin-top:10px}
+.lane-notes dd{margin:2px 0 0;font-size:15px;color:var(--ink-2)}
+.share-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:18px}
+.share-row span{font:400 13px var(--mono);color:var(--muted)}
+
+/* Dialog */
+dialog{border:1.5px solid var(--rule);border-radius:14px;padding:0;background:var(--panel);color:var(--ink);width:min(420px,calc(100vw - 32px));box-shadow:0 20px 60px rgba(20,10,30,.35)}
+dialog::backdrop{background:rgba(20,14,28,.5)}
+dialog form{display:grid;gap:14px;padding:20px}
+dialog h2{font:800 30px/1 var(--display);text-transform:uppercase;margin:0}
+dialog .field input,dialog .field select{width:100%;max-width:none}
+dialog .row{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between}
+dialog .row .right{display:flex;gap:10px;margin-left:auto}
+.err{color:var(--p0);font:500 13px/1.3 var(--mono);min-height:1em}
+
+@media (min-width:760px){
+  .yr{grid-template-columns:150px 1fr}
+  .yr-h{display:block}
+  .yr-h .ages{display:grid;margin-top:6px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .readout{transition:background .2s}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="mast">
+  <h1><span>Not so</span> <span>long ago</span></h1>
+  <p>Put LGBTQ+ history on your own life, and on the lives of the people you love. Drag across the years to see what was still a crime, what was still banned, and how old each of you was when it changed.</p>
+</header>
+
+<div class="people" id="people" aria-label="People on the lifelines"></div>
+
+<div class="starter" id="starter" hidden>
+  <p><strong>These are example lifelines.</strong> Put yourself on instead, then add the people you want to compare with: a parent, a grandparent, a partner, a kid.</p>
+  <form id="starter-form" autocomplete="off">
+    <div class="field"><label for="s-year">Born in</label><input id="s-year" type="number" inputmode="numeric" min="1900" max="2026" placeholder="1990" required></div>
+    <div class="field"><label for="s-state">Grew up in</label><select id="s-state"></select></div>
+    <button class="btn" type="submit">Show my lifeline</button>
+  </form>
+</div>
+
+<section id="lifelines" aria-labelledby="h-lifelines">
+  <div class="sec-h"><h2 id="h-lifelines">Lifelines</h2><p>Each dark bar is a rule that held in the US. Where it thins, states were changing it one by one.</p></div>
+  <div class="chart-box" id="chart"></div>
+  <div class="scrub"><label for="year">Year</label><input id="year" type="range" min="1920" max="2026" step="1" value="1990"></div>
+  <div class="legend" aria-hidden="true">
+    <span><i class="k-full"></i>In effect</span>
+    <span><i class="k-part"></i>Partly, or a narrower version</span>
+    <span><i class="k-thin"></i>Thinner: fewer states</span>
+    <span><i class="k-dot" id="legend-dot"></i>When it changed where they grew up</span>
+  </div>
+  <div class="readout" id="readout" aria-live="polite"></div>
+</section>
+
+<section id="ages-sec" aria-labelledby="h-ages">
+  <div class="sec-h"><h2 id="h-ages">How old were you?</h2><p>Ages at the turning points, side by side.</p></div>
+  <ul class="headlines" id="headlines"></ul>
+  <div class="table-scroll"><table class="ages-t" id="ages-table"></table></div>
+  <p class="foot">Ages are counted by year of birth, so anyone whose birthday falls later in the year was a year younger on the day.</p>
+</section>
+
+<section id="years-sec" aria-labelledby="h-years">
+  <div class="sec-h"><h2 id="h-years">Year by year</h2><p>What happened, and who was around to see it.</p></div>
+  <div class="filters" id="filters" role="group" aria-label="Show these kinds of events"></div>
+  <div class="tone-key"><span><b class="up">▲</b> a step forward</span><span><b>▼</b> a setback or a loss</span><span><b>●</b> a moment</span></div>
+  <nav class="decades" id="decades" aria-label="Jump to a decade"></nav>
+  <div class="years" id="years"></div>
+</section>
+
+<section id="about" aria-labelledby="h-about">
+  <div class="sec-h"><h2 id="h-about">About the bars</h2></div>
+  <div class="about">
+    <div>
+      <dl class="lane-notes" id="lane-notes"></dl>
+    </div>
+    <div>
+      <h3>Where the dates come from</h3>
+      <p>Every date here was checked against public sources: court rulings, statutes, federal agency notices, and the Wikipedia articles that cite them. State dates for sodomy laws mark when consenting adults of the same sex could no longer be prosecuted there, whether a legislature repealed the law or a court struck it down. State marriage dates mark when couples could marry statewide for good; short windows that were later shut are listed as their own events.</p>
+      <p>Each lifeline takes a stripe of Gilbert Baker's 1978 rainbow flag, oldest person first. Baker said red stood for life.</p>
+      <p>Nothing you enter leaves this device. It's saved in this browser so it's here next time.</p>
+      <h3>Sources</h3>
+      <ul id="sources"></ul>
+    </div>
+  </div>
+  <div class="share-row" id="share-row" hidden>
+    <button class="btn quiet" id="share" type="button">Copy a link to these lifelines</button>
+    <span id="share-msg"></span>
+  </div>
+  <div class="share-row">
+    <button class="btn quiet" id="reset" type="button">Start over with the examples</button>
+  </div>
+</section>
+
+</div>
+
+<dialog id="edit">
+  <form id="edit-form" method="dialog" autocomplete="off">
+    <h2 id="edit-h">Add a person</h2>
+    <div class="field"><label for="e-name">Name</label><input id="e-name" type="text" maxlength="24" placeholder="Grandma, Jordan, Me…" required></div>
+    <div class="field"><label for="e-year">Born in</label><input id="e-year" type="number" inputmode="numeric" min="1900" max="2026" required></div>
+    <div class="field"><label for="e-state">Grew up in</label><select id="e-state"></select></div>
+    <div class="err" id="e-err"></div>
+    <div class="row">
+      <button class="btn danger" type="button" id="e-remove">Remove</button>
+      <div class="right">
+        <button class="btn quiet" type="button" id="e-cancel">Cancel</button>
+        <button class="btn" type="submit" id="e-save">Save</button>
+      </div>
+    </div>
+  </form>
+</dialog>
+
+<!--
+  DATA. Plain text so it's easy to correct.
+  Events: date | category | tone | title | blurb
+    date: YYYY-MM-DD, YYYY-MM or YYYY
+    category: rights, organizing, health, trans, office, culture, world
+    tone: + a step forward, - a setback or a loss, . a moment
+-->
+<script type="text/plain" id="data-events">
+1924-12-10 | organizing | + | Society for Human Rights founded | Henry Gerber starts the first documented gay rights group in the US, in Chicago. A police raid ends it within a year.
+1933-05-06 | world | - | Nazis raid the Institute for Sexual Science | Students and SA men sack Magnus Hirschfeld's Berlin institute; its library is burned in the book burnings days later.
+1934-07-01 | culture | - | Hollywood starts enforcing the Production Code | The Hays Code bans any depiction of "sex perversion" in American films, keeping openly gay characters off screen for decades.
+1948-01-05 | culture | . | The Kinsey Report | Alfred Kinsey's Sexual Behavior in the Human Male reports that same-sex experience is far more common than Americans assumed.
+1950-11-11 | organizing | + | The Mattachine Society | Harry Hay and friends found one of the first lasting gay rights groups in the US, in Los Angeles.
+1952 | health | - | The first DSM | The American Psychiatric Association's first diagnostic manual lists homosexuality as a "sociopathic personality disturbance."
+1952-03-31 | world | - | Alan Turing convicted | The British codebreaker is convicted of "gross indecency" for a relationship with a man and made to take hormone treatment to stay out of prison. He dies in 1954.
+1952-06-27 | rights | - | Immigration law bars gay people | The McCarran-Walter Act excludes immigrants with a "psychopathic personality," a phrase used to turn away gay and lesbian people.
+1952-12-01 | trans | . | Christine Jorgensen makes the front page | The New York Daily News reports the ex-GI's transition. She becomes the most famous trans woman in the world.
+1953-04-27 | rights | - | Gay people barred from federal jobs | Eisenhower's Executive Order 10450 makes "sexual perversion" grounds for firing. Thousands lose their jobs in the Lavender Scare.
+1955-09-21 | organizing | + | Daughters of Bilitis | Del Martin, Phyllis Lyon and six other women found the first lesbian rights group in the US, in San Francisco.
+1956 | culture | . | Giovanni's Room | James Baldwin publishes a novel about love between two men after his publisher, Knopf, turned it down.
+1958-01-13 | rights | + | ONE, Inc. v. Olesen | The Supreme Court rules a gay magazine can't be banned from the mail just for discussing homosexuality. It's the Court's first pro-gay ruling.
+1961-11-07 | office | + | José Sarria runs for office | The drag performer runs for the San Francisco Board of Supervisors, the first openly gay candidate for public office in the US.
+1962-01-01 | rights | + | Illinois repeals its sodomy law | Illinois becomes the first state to decriminalize sex between consenting adults of the same sex.
+1963-08-28 | organizing | . | Bayard Rustin organizes the March on Washington | The gay civil rights strategist ran the march, but was named only deputy director, partly because other leaders feared attacks over his sexuality.
+1965-04-17 | organizing | + | Picket at the White House | Frank Kameny and Mattachine members hold one of the first gay rights protests in the US.
+1966-04-21 | organizing | + | The Julius' sip-in | Activists announce they're gay and ask to be served at a Greenwich Village bar, challenging rules that let bars refuse gay customers.
+1966-08 | trans | + | Compton's Cafeteria riot | Trans women and drag queens in San Francisco's Tenderloin fight back against police harassment, three years before Stonewall.
+1967-07-27 | world | + | England and Wales partly decriminalize | The Sexual Offences Act legalizes sex between two men over 21 in private.
+1968-04-14 | culture | . | The Boys in the Band | Mart Crowley's play opens off-Broadway, one of the first mainstream works about gay men's lives.
+1968-10-06 | organizing | + | A church for gay Christians | Rev. Troy Perry holds the first service of the Metropolitan Community Church in his Huntington Park, California, living room. Twelve people come.
+1969-06-28 | organizing | + | Stonewall | Police raid the Stonewall Inn in New York. Patrons and neighbors fight back, sparking days of protest and a new, public movement.
+1969-08-26 | world | + | Canada partly decriminalizes | A new law takes effect that allows sex between two consenting adults 21 and over, in private.
+1970 | trans | + | STAR founded | Sylvia Rivera and Marsha P. Johnson start Street Transvestite Action Revolutionaries to house and support homeless trans youth.
+1970-06-28 | organizing | + | The first Pride marches | On Stonewall's first anniversary, thousands march up Sixth Avenue in New York. Chicago and Los Angeles march the same weekend.
+1971-10-15 | rights | - | Minnesota says no to a gay couple's marriage | Minnesota's top court rules against Jack Baker and Michael McConnell, the first known same-sex couple in the US to apply for a marriage license. The US Supreme Court turns away their appeal in 1972.
+1972-03-07 | rights | + | East Lansing bans bias in city hiring | East Lansing, Michigan, becomes the first US city to bar discrimination against gay people, in its own hiring.
+1972-06-25 | organizing | + | A mother marches | Jeanne Manford walks beside her gay son at New York's Pride march with a sign for parents. Her group becomes PFLAG.
+1973-06-24 | organizing | - | UpStairs Lounge fire | A fire, believed to be arson, kills 32 people at a gay bar in New Orleans. No attack on LGBTQ+ people in the US would kill more until 2016.
+1973-12-15 | health | + | No longer a mental illness | The American Psychiatric Association's board votes to remove homosexuality from its diagnostic manual.
+1974-04-02 | office | + | Kathy Kozachenko elected | She wins a seat on the Ann Arbor city council, the first openly gay person elected to public office in the US.
+1974-11-05 | office | + | Elaine Noble elected | She wins a seat in the Massachusetts House, the first openly gay person elected to a state legislature.
+1975-07-03 | rights | + | Federal jobs reopen | The Civil Service Commission ends its ban on hiring gay and lesbian people for most federal jobs.
+1975-09-08 | culture | + | "I Am a Homosexual" | Air Force Sergeant Leonard Matlovich appears on the cover of Time after coming out to challenge the military ban.
+1977-06-07 | rights | - | "Save Our Children" | Anita Bryant's campaign persuades Dade County, Florida voters to repeal a gay rights ordinance.
+1977-08-16 | trans | + | Renée Richards wins in court | A New York court rules the trans tennis player can compete in the US Open as a woman.
+1977-11-08 | office | + | Harvey Milk elected | He wins a seat on the San Francisco Board of Supervisors, one of the first openly gay elected officials in a major city.
+1978-06-25 | culture | + | The rainbow flag | Gilbert Baker's flag flies for the first time at San Francisco's Gay Freedom Day.
+1978-11-07 | rights | + | The Briggs Initiative fails | California voters reject Proposition 6, which would have banned gay and lesbian people from teaching in public schools.
+1978-11-27 | office | - | Milk and Moscone assassinated | Former supervisor Dan White kills Harvey Milk and Mayor George Moscone at San Francisco City Hall.
+1979-10-14 | organizing | + | First March on Washington | About 100,000 people join the National March on Washington for Lesbian and Gay Rights.
+1980 | trans | - | "Transsexualism" enters the DSM | The third edition of the DSM adds "transsexualism" as a diagnosis for trans people, seven years after removing homosexuality.
+1980-05-30 | rights | + | Two boys go to the prom | After a federal judge rules for him, Aaron Fricke takes Paul Guilbert to his Rhode Island high school prom.
+1981-06-05 | health | - | The first AIDS report | The CDC describes five young gay men in Los Angeles with a rare pneumonia. It's the first official report of what becomes AIDS.
+1982-01 | health | + | Gay Men's Health Crisis | Larry Kramer and friends start the first AIDS service organization, in New York.
+1982-02-25 | rights | + | Wisconsin bans anti-gay discrimination | It becomes the first state to outlaw discrimination based on sexual orientation.
+1982-08-28 | culture | + | The first Gay Games | Former Olympian Tom Waddell's Gay Games open in San Francisco. A lawsuit forced organizers to drop the name "Gay Olympics."
+1982-09-24 | health | . | The CDC names AIDS | The agency uses the term "acquired immune deficiency syndrome" for the first time.
+1983-07-14 | office | . | Gerry Studds comes out | Facing censure over a 1973 relationship with a 17-year-old House page, the Massachusetts congressman tells the House he is gay. He becomes the first openly gay member of Congress and keeps winning re-election.
+1984-12-04 | rights | + | Berkeley recognizes domestic partners | Berkeley, California, becomes the first US city to offer benefits to its employees' unmarried partners, including same-sex partners.
+1985-03-02 | health | . | The first HIV test | The FDA approves a blood test for HIV antibodies, first used to screen the blood supply.
+1985-04-21 | culture | . | The Normal Heart | Larry Kramer's play about the early AIDS years opens in New York.
+1985-10-02 | health | - | Rock Hudson dies | The film star's death from AIDS, months after he made his diagnosis public, forces the epidemic into national news.
+1986-06-30 | rights | - | Bowers v. Hardwick | The Supreme Court upholds Georgia's sodomy law 5–4, ruling the Constitution gives no right to gay sex.
+1987-03-12 | health | + | ACT UP | After a speech by Larry Kramer, activists found ACT UP in New York to force faster action on AIDS drugs.
+1987-03-19 | health | + | AZT approved | The FDA approves the first drug to treat HIV.
+1987-05-30 | office | + | Barney Frank comes out | The Massachusetts congressman becomes the first member of Congress to come out voluntarily.
+1987-10-11 | health | . | The AIDS Quilt | The NAMES Project quilt, nearly 2,000 panels, is laid out on the National Mall during the Second National March on Washington.
+1988-05-24 | world | - | Section 28 | A British law bars local councils from "promoting homosexuality," including in the schools they run. It stays law until 2000 in Scotland and 2003 in England and Wales.
+1988-05-26 | health | . | An AIDS booklet for every home | The Surgeon General's "Understanding AIDS" booklet starts arriving in all 107 million US households, the largest public health mailing ever.
+1988-10-11 | organizing | + | National Coming Out Day | The first one is held on the anniversary of the 1987 march.
+1989-10-01 | world | + | Denmark recognizes couples | It becomes the first country to give same-sex couples legal recognition, through registered partnerships.
+1990-04-23 | rights | + | The Hate Crime Statistics Act | The first federal law to name sexual orientation has the FBI track hate crimes against gay, lesbian and bi people.
+1990-05-17 | health | + | The WHO drops homosexuality | The World Health Organization removes it from its list of mental disorders. May 17 is now the International Day Against Homophobia.
+1990-08-18 | health | + | The Ryan White CARE Act | Named for an Indiana teenager who died of AIDS, the law funds care for people with HIV who can't afford it.
+1990-11-29 | rights | + | Gay immigrants no longer barred | The Immigration Act of 1990 drops the exclusion that had been used to keep gay and lesbian people out of the US.
+1991-11-07 | health | . | Magic Johnson announces HIV | The basketball star retires, telling the country he has HIV and pushing the virus into a new kind of conversation.
+1993 | trans | + | Minnesota protects trans people | It becomes the first state to ban discrimination based on gender identity.
+1993-04-25 | organizing | + | The 1993 March on Washington | Hundreds of thousands march for lesbian, gay and bi equal rights.
+1993-05-05 | rights | . | Hawaii's marriage case | Hawaii's Supreme Court says banning same-sex marriage may be sex discrimination, setting off a national fight over marriage.
+1993-11-30 | rights | - | "Don't Ask, Don't Tell" | Clinton signs the law. Gay, lesbian and bi troops can serve only if they stay silent; more than 13,000 are discharged under it.
+1994-04-27 | world | + | South Africa's constitution | Its interim constitution takes effect, the first in the world to ban discrimination based on sexual orientation.
+1994-06-30 | culture | . | Pedro Zamora on The Real World | An openly gay, HIV-positive cast member brings AIDS into millions of living rooms. He dies that November, aged 22.
+1995 | health | - | The worst year of AIDS in America | AIDS is the leading cause of death for Americans aged 25 to 44.
+1995-08-02 | rights | + | Security clearances | Clinton orders that security clearances can no longer be denied because of sexual orientation.
+1996-05-20 | rights | + | Romer v. Evans | The Supreme Court strikes down a Colorado amendment that barred any law protecting gay people.
+1996-07 | health | + | Combination therapy | At the Vancouver AIDS conference, researchers show that drug "cocktails" can hold HIV back. Death rates fall sharply the next year.
+1996-09-21 | rights | - | The Defense of Marriage Act | Clinton signs a law defining marriage as between a man and a woman for all federal purposes.
+1997-04-30 | culture | + | "Yep, I'm Gay" | Ellen's character comes out on her sitcom, two weeks after Ellen DeGeneres came out on the cover of Time.
+1998-09-21 | culture | + | Will & Grace | The sitcom premieres with two gay men among its four leads. Its first run lasts eight seasons, and a 2017 revival adds three more.
+1998-10-12 | rights | - | Matthew Shepard dies | The 21-year-old college student is beaten and left tied to a fence near Laramie, Wyoming. He dies of his injuries on October 12.
+1998-11-03 | office | + | Tammy Baldwin elected to Congress | She becomes the first openly gay person elected to Congress as a newcomer, not after coming out in office.
+1999-11-20 | trans | . | Transgender Day of Remembrance | The first vigil honors Rita Hester, a Black trans woman killed in Massachusetts in 1998, and others lost to violence.
+2000-07-01 | rights | + | Vermont civil unions | Vermont becomes the first state to give same-sex couples the legal rights of marriage under another name.
+2001-04-01 | world | + | Marriage in the Netherlands | The Netherlands becomes the first country to let same-sex couples marry.
+2003-06-26 | rights | + | Lawrence v. Texas | The Supreme Court strikes down every remaining sodomy law in the country, overturning Bowers v. Hardwick.
+2003-11-18 | rights | + | Goodridge | Massachusetts' highest court rules the state must let same-sex couples marry.
+2004-05-17 | rights | + | The first legal marriages | Same-sex couples marry in Massachusetts, the first state to allow it.
+2004-11-02 | rights | - | Eleven states ban marriage | Voters in 11 states amend their constitutions to ban same-sex marriage.
+2005-07-20 | world | + | Marriage in Canada | Canada's Civil Marriage Act makes same-sex marriage legal nationwide.
+2005-12-09 | culture | . | Brokeback Mountain | Ang Lee's film about two ranch hands in love becomes a box-office hit.
+2006-11-30 | world | + | Marriage in South Africa | South Africa becomes the first country in Africa to allow same-sex marriage.
+2008-05-15 | rights | + | California's marriage ruling | The state Supreme Court strikes down California's marriage ban. Weddings begin a month later.
+2008-11-04 | rights | - | Proposition 8 | California voters end same-sex marriage in the state after about 18,000 couples had married.
+2009-03-31 | trans | + | Trans Day of Visibility | Activist Rachel Crandall starts a day to celebrate trans people, not only mourn them.
+2009-10-28 | rights | + | The Shepard–Byrd Act | Named for Matthew Shepard and James Byrd Jr., it makes attacks over sexual orientation or gender identity federal hate crimes. It is the first federal law to protect trans people by name.
+2010-01-04 | health | + | HIV travel ban lifted | People with HIV can visit and immigrate to the US again, after 22 years.
+2010-06 | trans | + | Passports without surgery | The State Department lets people change the gender on their passport with a doctor's letter instead of proof of surgery.
+2010-07-15 | world | + | Marriage in Argentina | It becomes the first country in Latin America to allow same-sex marriage.
+2010-09-21 | culture | + | It Gets Better | Dan Savage and Terry Miller post a video for LGBTQ+ teens. Tens of thousands of people follow with videos of their own.
+2011-09-20 | rights | + | "Don't Ask, Don't Tell" ends | Gay, lesbian and bi troops can serve openly for the first time.
+2012-05-09 | office | + | A president for marriage | Barack Obama becomes the first sitting president to say same-sex couples should be able to marry.
+2012-05-09 | world | + | Argentina's gender identity law | Argentina lets people change their legal gender without a doctor, a judge or surgery, a first for a country.
+2012-07-16 | health | + | PrEP approved | The FDA approves Truvada, a daily pill that prevents HIV.
+2012-11-06 | office | + | Tammy Baldwin elected to the Senate | She becomes the first openly gay US senator. The same night, Maine, Maryland and Washington voters approve same-sex marriage.
+2013-05-18 | trans | + | "Gender dysphoria" | The DSM-5 replaces "gender identity disorder," shifting the focus from identity to distress.
+2013-06-26 | rights | + | United States v. Windsor | The Supreme Court strikes down the part of DOMA that kept the federal government from recognizing same-sex marriages.
+2014-05-29 | trans | + | The Transgender Tipping Point | Laverne Cox becomes the first openly trans person on the cover of Time.
+2014-07-21 | rights | + | Federal contractors | Obama bars companies with federal contracts from discriminating based on sexual orientation or gender identity.
+2015-05-22 | world | + | Ireland votes yes | Ireland becomes the first country to approve same-sex marriage by popular vote.
+2015-06-26 | rights | + | Obergefell v. Hodges | The Supreme Court rules that same-sex couples can marry in every state.
+2015-12-21 | health | . | Lifetime blood ban ends | The FDA replaces its lifetime ban on blood from gay and bi men with a one-year wait since last sex with a man.
+2016-03-23 | trans | - | North Carolina's HB2 | The state requires people to use restrooms in government buildings that match the sex on their birth certificate.
+2016-06-12 | rights | - | Pulse | A gunman kills 49 people at a gay nightclub in Orlando on Latin night.
+2016-06-24 | culture | + | Stonewall National Monument | Obama makes the Stonewall Inn area the first national monument to LGBTQ+ history.
+2016-06-30 | trans | + | Trans troops can serve openly | The Pentagon ends its ban on transgender service members.
+2017-02-26 | culture | + | Moonlight wins Best Picture | The story of a gay Black man growing up in Miami wins the Oscar.
+2017-11-07 | office | + | Danica Roem elected | She wins a seat in the Virginia House of Delegates, the first openly trans person elected and seated in a US state legislature.
+2018-06-03 | culture | + | Pose premieres | The drama about New York's ballroom scene has the largest cast of trans actors in regular roles in TV history.
+2018-09-06 | world | + | India decriminalizes | India's Supreme Court strikes down the colonial-era law against gay sex.
+2018-11-06 | office | + | Jared Polis elected governor | Colorado makes him the first openly gay man elected governor of a US state.
+2019-04-12 | trans | - | Trans military ban takes effect | A new Pentagon policy bars most transgender people from enlisting or serving as their gender.
+2019-05-24 | world | + | Marriage in Taiwan | Taiwan becomes the first place in Asia to allow same-sex marriage.
+2019-05-25 | trans | + | The WHO's ICD-11 | The World Health Organization moves being transgender out of its chapter on mental disorders, effective 2022.
+2020-04-02 | health | . | Blood wait cut to three months | The FDA shortens the wait for gay and bi men to give blood.
+2020-06-15 | rights | + | Bostock v. Clayton County | The Supreme Court rules that firing someone for being gay or transgender is illegal sex discrimination.
+2021-01-25 | trans | + | Trans military ban reversed | President Biden lets transgender people serve openly again.
+2021-02-02 | office | + | Pete Buttigieg confirmed | He becomes the first openly gay Cabinet secretary confirmed by the Senate.
+2021-03-24 | office | + | Rachel Levine confirmed | The assistant secretary for health becomes the first openly trans federal official confirmed by the Senate.
+2021-04-06 | trans | - | Arkansas bans care for trans youth | It becomes the first state to ban gender-affirming medical care for minors, overriding the governor's veto.
+2022-04-11 | trans | + | The X passport | US passports offer an X gender marker.
+2022-11-19 | rights | - | Club Q | A gunman kills five people at an LGBTQ+ nightclub in Colorado Springs.
+2022-12-13 | rights | + | The Respect for Marriage Act | The law repeals DOMA and requires the federal government and every state to recognize same-sex marriages performed where they were legal.
+2023-05-11 | health | + | Blood donation by behavior | The FDA drops rules that singled out gay and bi men and screens every donor with the same questions.
+2023-05-26 | world | - | Uganda's Anti-Homosexuality Act | The law includes the death penalty for "aggravated homosexuality."
+2024-02-15 | world | + | Marriage in Greece | Greece becomes the first majority Orthodox Christian country to allow same-sex marriage.
+2024-11-05 | office | + | Sarah McBride elected | Delaware sends the first openly transgender member to Congress.
+2025-01-20 | trans | - | "Two sexes" executive order | The federal government recognizes only male and female, fixed at birth. New passports stop offering X or changed markers.
+2025-01-23 | world | + | Marriage in Thailand | Thailand's marriage equality law takes effect, the first in Southeast Asia.
+2025-05-06 | trans | - | Trans military ban returns | The Supreme Court lets a new ban on transgender service members take effect while lawsuits continue.
+2025-06-18 | trans | - | United States v. Skrmetti | The Supreme Court upholds Tennessee's ban on gender-affirming care for minors.
+2025-11-06 | trans | - | Passports by birth sex | The Supreme Court lets the State Department put only the sex assigned at birth on new passports, with no X option, while lawsuits continue.
+2025-11-10 | rights | . | Obergefell left standing | The Supreme Court turns away Kim Davis's appeal, which asked it to overturn the right of same-sex couples to marry. No justice dissents.
+2026-06-01 | trans | + | Court blocks trans troop discharges | A federal appeals court rules that the military ban likely violates equal protection and keeps the plaintiffs already in uniform serving. Recruits are still barred.
+</script>
+
+<!--
+  States: code | name | decriminalized | how | marriage | how | earlier marriage windows | first civil union or partnership | note
+    how (decriminalized): legislature, court, lawrence
+    how (marriage): court, legislature, ballot, federal-court, obergefell
+    windows: from>to>title>blurb, separated by ; (marriages that started somewhere in the state and were stopped, or spread county by county)
+    unions: date kind
+    note: a sentence added wherever the state's sodomy law comes up
+-->
+<script type="text/plain" id="data-states">
+AL | Alabama | 2003-06-26 | lawrence | 2015-06-26 | obergefell | 2015-02-09>2015-03-03>Weddings begin, then stop>After a federal ruling, most Alabama counties issue licenses to same-sex couples, until the Alabama Supreme Court orders judges to stop on March 3. |  | 
+AK | Alaska | 1980-01-01 | legislature | 2014-10-12 | federal-court |  |  | 
+AZ | Arizona | 2001-08-09 | legislature | 2014-10-17 | federal-court |  |  | 
+AR | Arkansas | 2002-07-05 | court | 2015-06-26 | obergefell | 2014-05-10>2014-05-16>Weddings begin, then stop>After a state judge strikes down the ban, about 500 couples get licenses before the Arkansas Supreme Court puts the ruling on hold on May 16. |  | Arkansas had repealed its law in 1976, then made sex between people of the same sex a crime again in 1977.
+CA | California | 1976-01-01 | legislature | 2013-06-28 | federal-court | 2004-02-12>2004-03-11>San Francisco weddings>San Francisco issues about 4,000 marriage licenses to same-sex couples on the mayor’s order, until the state Supreme Court stops it on March 11. The marriages are later voided.;2008-06-16>2008-11-05>Weddings begin, then stop>Same-sex couples can marry across California until Proposition 8 passes in November. About 18,000 couples marry, and their marriages stay valid. | 2000-01-01 domestic partnerships | 
+CO | Colorado | 1972-07-01 | legislature | 2014-10-07 | federal-court | 1975-03>1975-04>A clerk in Boulder>Boulder County clerk Clela Rorex issues marriage licenses to six same-sex couples until the state attorney general tells her to stop.;2014-06-25>2014-07-29>Boulder issues licenses>Boulder County issues about 200 licenses to same-sex couples until the Colorado Supreme Court stops it. | 2013-05-01 civil unions | 
+CT | Connecticut | 1971-10-01 | legislature | 2008-11-12 | court |  | 2005-10-01 civil unions | 
+DE | Delaware | 1973-07-01 | legislature | 2013-07-01 | legislature |  | 2012-01-01 civil unions | 
+DC | District of Columbia | 1993-09-14 | legislature | 2010-03-09 | legislature |  | 2002-07-08 domestic partnerships | 
+FL | Florida | 2003-06-26 | lawrence | 2015-01-06 | federal-court |  |  | 
+GA | Georgia | 1998-11-23 | court | 2015-06-26 | obergefell |  |  | 
+HI | Hawaii | 1973-01-01 | legislature | 2013-12-02 | legislature |  | 1997-07 reciprocal beneficiary status | 
+ID | Idaho | 2003-06-26 | lawrence | 2014-10-15 | federal-court |  |  | Idaho repealed its law at the start of 1972, then brought it back three months later.
+IL | Illinois | 1962-01-01 | legislature | 2014-06-01 | legislature | 2014-02-21>2014-06-01>Chicago goes first>After a federal ruling, Cook County starts issuing licenses to same-sex couples, months before the statewide law takes effect. | 2011-06-01 civil unions | 
+IN | Indiana | 1977 | legislature | 2014-10-06 | federal-court | 2014-06-25>2014-06-27>Three days of weddings>A federal ruling lets couples marry in most Indiana counties until an appeals court puts it on hold on June 27. |  | 
+IA | Iowa | 1978-01-01 | legislature | 2009-04-27 | court | 2007-08-31>2007-08-31>One wedding>A judge strikes down Iowa’s ban. One couple marries before he puts his ruling on hold the next day. |  | 
+KS | Kansas | 2003-06-26 | lawrence | 2015-06-26 | obergefell | 2014-11-12>2015-06-26>Licenses, but no recognition>Most Kansas counties begin issuing licenses to same-sex couples, but the state refuses to recognize the marriages until 2015. |  | The law there applied only to same-sex couples.
+KY | Kentucky | 1992-09-24 | court | 2015-06-26 | obergefell |  |  | The law there applied only to same-sex couples.
+LA | Louisiana | 2003-06-26 | lawrence | 2015-06-26 | obergefell |  |  | 
+ME | Maine | 1976-05-01 | legislature | 2012-12-29 | ballot |  | 2004-07-30 domestic partnerships | 
+MD | Maryland | 1999-01-19 | court | 2013-01-01 | ballot |  | 2008-07-01 domestic partnerships | 
+MA | Massachusetts | 2002-02-21 | court | 2004-05-17 | court |  |  | 
+MI | Michigan | 2003-06-26 | lawrence | 2015-06-26 | obergefell | 2014-03-22>2014-03-22>One Saturday of weddings>After a federal ruling late on a Friday, four county clerks open on Saturday and 323 couples marry before an appeals court puts the ruling on hold. |  | 
+MN | Minnesota | 2001-07-02 | court | 2013-08-01 | legislature |  |  | 
+MS | Mississippi | 2003-06-26 | lawrence | 2015-06-26 | obergefell |  |  | 
+MO | Missouri | 2003-06-26 | lawrence | 2015-06-26 | obergefell | 2014-11-05>2015-06-26>St. Louis goes first>A state judge strikes down the ban for the City of St. Louis, which keeps issuing licenses to same-sex couples. |  | The law there applied only to same-sex couples.
+MT | Montana | 1997-07-02 | court | 2014-11-19 | federal-court |  |  | The law there applied only to same-sex couples.
+NE | Nebraska | 1978-07-01 | legislature | 2015-06-26 | obergefell |  |  | 
+NV | Nevada | 1993-10-01 | legislature | 2014-10-09 | federal-court |  | 2009-10-01 domestic partnerships | The law there applied only to same-sex couples.
+NH | New Hampshire | 1975 | legislature | 2010-01-01 | legislature |  | 2008-01-01 civil unions | 
+NJ | New Jersey | 1979-09-01 | legislature | 2013-10-21 | court |  | 2004-07-10 domestic partnerships | 
+NM | New Mexico | 1975-06 | legislature | 2013-12-19 | court | 2004-02-20>2004-02-20>Sandoval County weddings>Sandoval County’s clerk issues 64 licenses to same-sex couples before the attorney general stops her the same day.;2013-08-21>2013-12-19>County by county>New Mexico counties begin marrying same-sex couples one at a time, starting with Doña Ana County. |  | 
+NY | New York | 1980-12-18 | court | 2011-07-24 | legislature |  |  | 
+NC | North Carolina | 2003-06-26 | lawrence | 2014-10-10 | federal-court |  |  | 
+ND | North Dakota | 1975-07-01 | legislature | 2015-06-26 | obergefell |  |  | 
+OH | Ohio | 1974-01-01 | legislature | 2015-06-26 | obergefell |  |  | 
+OK | Oklahoma | 2003-06-26 | lawrence | 2014-10-06 | federal-court |  |  | Since a 1986 ruling, the law there applied only to same-sex couples.
+OR | Oregon | 1972-01-01 | legislature | 2014-05-19 | federal-court | 2004-03-03>2004-04-20>Portland weddings>Multnomah County issues more than 3,000 licenses to same-sex couples until a judge stops it. The marriages are later voided. | 2008-02-04 domestic partnerships | 
+PA | Pennsylvania | 1980-05-30 | court | 2014-05-20 | federal-court | 2013-07-24>2013-09-12>Montgomery County licenses>A Montgomery County official issues 174 licenses to same-sex couples until a court orders him to stop. |  | 
+RI | Rhode Island | 1998-06-05 | legislature | 2013-08-01 | legislature |  | 2011-07-01 civil unions | 
+SC | South Carolina | 2003-06-26 | lawrence | 2014-11-20 | federal-court |  |  | 
+SD | South Dakota | 1977-04-01 | legislature | 2015-06-26 | obergefell |  |  | 
+TN | Tennessee | 1996-01-26 | court | 2015-06-26 | obergefell |  |  | The law there applied only to same-sex couples.
+TX | Texas | 2003-06-26 | lawrence | 2015-06-26 | obergefell | 2015-02-19>2015-02-19>One wedding in Austin>One couple marries under a court order before the Texas Supreme Court blocks further licenses the same day. |  | The law there applied only to same-sex couples.
+UT | Utah | 2003-06-26 | lawrence | 2014-10-06 | federal-court | 2013-12-20>2014-01-06>Weddings begin, then stop>After a federal ruling, about 1,300 couples marry in Utah before the US Supreme Court puts it on hold on January 6. |  | 
+VT | Vermont | 1977 | legislature | 2009-09-01 | legislature |  | 2000-07-01 civil unions | 
+VA | Virginia | 2003-06-26 | lawrence | 2014-10-06 | federal-court |  |  | 
+WA | Washington | 1976-07-01 | legislature | 2012-12-06 | ballot |  | 2007-07-22 domestic partnerships | 
+WV | West Virginia | 1976 | legislature | 2014-10-09 | federal-court |  |  | 
+WI | Wisconsin | 1983-05 | legislature | 2014-10-06 | federal-court | 2014-06-06>2014-06-13>Weddings begin, then stop>After a federal ruling, more than 500 couples marry in Wisconsin before the judge puts her ruling on hold on June 13. | 2009-08-03 domestic partnerships | 
+WY | Wyoming | 1977 | legislature | 2014-10-21 | federal-court |  |  |
+</script>
+
+<script>
+(function(){
+'use strict';
+
+/* ---------- helpers ---------- */
+const $ = (s, r) => (r || document).querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const TODAY = new Date();
+const THIS_YEAR = TODAY.getFullYear();
+const NOW_T = THIS_YEAR + (TODAY - new Date(THIS_YEAR, 0, 1)) / (new Date(THIS_YEAR + 1, 0, 1) - new Date(THIS_YEAR, 0, 1));
+const MAX_PEOPLE = 6;
+const STORE = 'not-so-long-ago.people.v1';
+
+function parseDate(s){
+  s = String(s).trim();
+  const [y, m, d] = s.split('-').map(Number);
+  let t;
+  if (d) { const a = Date.UTC(y, 0, 1), b = Date.UTC(y + 1, 0, 1); t = y + (Date.UTC(y, m - 1, d) - a) / (b - a); }
+  else if (m) t = y + (m - 0.5) / 12;
+  else t = y + 0.5;
+  return { s, y, m: m || 0, d: d || 0, t };
+}
+function fmtDate(p, withYear){
+  if (withYear === undefined) withYear = true;
+  if (p.d) return MONTHS[p.m - 1] + ' ' + p.d + (withYear ? ', ' + p.y : '');
+  if (p.m) return MONTHS[p.m - 1] + (withYear ? ' ' + p.y : '');
+  return withYear ? String(p.y) : '';
+}
+const plural = (n, one, many) => n + ' ' + (n === 1 ? one : (many || one + 's'));
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+
+/* ---------- data ---------- */
+const CATS = [
+  ['rights', 'Law & rights'], ['organizing', 'Organizing'], ['health', 'Health & HIV'], ['trans', 'Trans lives'],
+  ['office', 'Politics'], ['culture', 'Culture'], ['world', 'Around the world']
+];
+const CAT_LABEL = Object.fromEntries(CATS);
+
+const EVENTS = $('#data-events').textContent.split('\n').map(l => l.trim()).filter(l => l && l[0] !== '#').map(l => {
+  const [d, cat, tone, title, blurb] = l.split('|').map(x => x.trim());
+  return { date: parseDate(d), cat, tone, title, blurb };
+});
+
+const STATES = {};
+$('#data-states').textContent.split('\n').map(l => l.trim()).filter(l => l && l[0] !== '#').forEach(l => {
+  const [code, name, dd, dh, md, mh, win, un, note] = l.split('|').map(x => (x || '').trim());
+  STATES[code] = {
+    code, name,
+    decrim: parseDate(dd), decrimHow: dh,
+    marry: parseDate(md), marryHow: mh,
+    windows: win ? win.split(';').map(w => { const [a, b, title, blurb] = w.split('>'); return { from: parseDate(a), to: parseDate(b), title, blurb }; }) : [],
+    unions: un ? { date: parseDate(un.split(' ')[0]), kind: un.split(' ').slice(1).join(' ') } : null,
+    note: note || ''
+  };
+});
+const FIFTY = Object.values(STATES).filter(s => s.code !== 'DC');
+const crimeStates = t => FIFTY.filter(s => s.decrim.t > t).length;
+const marryStates = t => FIFTY.filter(s => s.marry.t <= t).length;
+const LAWRENCE = parseDate('2003-06-26');
+const OBERGEFELL = parseDate('2015-06-26');
+
+/* Lanes: rules that held in the US. segs: [from, to, 'full'|'part', text for the year readout]. */
+const LANES = [
+  { id: 'illness', label: 'Called a mental illness',
+    segs: [[null, '1973-12-15', 'full', 'The American Psychiatric Association classified homosexuality as a mental illness.'],
+           ['1973-12-15', '1987', 'part', 'A narrower diagnosis, "ego-dystonic homosexuality," was still in the psychiatric manual.']],
+    note: 'The American Psychiatric Association listed homosexuality as a mental disorder in its first two manuals (1952 and 1968) and removed it in December 1973. A narrower diagnosis for people distressed by their orientation stayed until the 1987 revision. The World Health Organization kept homosexuality on its list until 1990.' },
+  { id: 'fedjobs', label: 'Barred from federal jobs',
+    segs: [['1953-04-27', '1975-07-03', 'full', 'Gay people could be fired from federal jobs, or never hired, for being gay.']],
+    note: 'Executive Order 10450 (1953) made "sexual perversion" grounds for dismissal from federal service. On July 3, 1975 the Civil Service Commission changed its rules so gay people could no longer be barred or fired for being gay. Security clearances could still be denied for being gay until 1995.' },
+  { id: 'immig', label: 'Gay immigrants turned away',
+    segs: [['1952-06-27', '1991-06-01', 'full', 'Gay and lesbian immigrants could be barred from entering the US.']],
+    note: 'The 1952 Immigration and Nationality Act barred people with a "psychopathic personality," which courts and officials applied to gay and lesbian immigrants; a 1965 amendment added "sexual deviation." The Immigration Act of 1990 removed the exclusion for everyone arriving from June 1, 1991.' },
+  { id: 'crime', label: 'Gay sex a crime', kind: 'decrim',
+    note: 'Every state once made sex between people of the same sex a crime. Illinois repealed its law first, in 1961 (effective 1962). By the time the Supreme Court struck down the rest in Lawrence v. Texas (2003), 14 states still had such laws. The bar thins as states repealed or courts struck down their laws.' },
+  { id: 'hiv', label: 'HIV travel ban',
+    segs: [['1987-07-11', '2010-01-04', 'full', 'People with HIV were barred from visiting or immigrating to the US.']],
+    note: 'In July 1987 Congress added HIV infection to the list of diseases that barred entry to the US, and in 1993 it wrote the ban into immigration law. The ban was lifted on January 4, 2010.' },
+  { id: 'military', label: 'No openly gay troops',
+    segs: [[null, '1994-02-28', 'full', 'Gay, lesbian and bi people were banned from the military.'],
+           ['1994-02-28', '2011-09-20', 'full', '"Don\'t Ask, Don\'t Tell": gay, lesbian and bi troops could serve only if they hid it.']],
+    note: 'The military banned gay, lesbian and bi service members outright until "Don\'t Ask, Don\'t Tell" took effect in 1994, which let them serve only if they kept it secret. Repeal took effect September 20, 2011.' },
+  { id: 'doma', label: 'Marriages ignored federally',
+    segs: [['1996-09-21', '2013-06-26', 'full', 'The federal government refused to recognize any same-sex marriage (DOMA).']],
+    note: 'The Defense of Marriage Act (1996) defined marriage as between a man and a woman for every federal law and benefit, so even couples married under state law were strangers to the federal government. The Supreme Court struck that part down in United States v. Windsor (2013).' },
+  { id: 'marriage', label: 'No same-sex marriage', kind: 'marry',
+    note: 'Massachusetts became the first state to marry same-sex couples in 2004. The bar thins as more states followed through courts, legislatures and ballots, until Obergefell v. Hodges (2015) opened marriage in every state.' },
+  { id: 'blood', label: 'Blood donation ban',
+    segs: [['1985-09', '2015-12-21', 'full', 'Any man who had had sex with a man since 1977 was banned from giving blood for life.'],
+           ['2015-12-21', '2023-05-11', 'part', 'Gay and bi men could give blood only after going without sex with men for a set time.']],
+    note: 'From September 1985 the FDA barred any man who had had sex with a man since 1977 from giving blood. In 2015 that became a one-year wait, and in 2020 a three-month wait. In 2023 the FDA switched to the same individual risk questions for every donor.' },
+  { id: 'fired', label: 'Legal to fire for being LGBTQ+',
+    segs: [[null, '2020-06-15', 'full', 'No federal law stopped employers from firing people for being gay, bi or trans.']],
+    note: 'Before Bostock v. Clayton County (2020), federal law didn\'t protect workers from being fired for being gay, bi or transgender. Some states and cities did: Wisconsin was first for sexual orientation (1982) and Minnesota for gender identity (1993).' },
+  { id: 'transmil', label: 'No openly trans troops',
+    segs: [[null, '2016-06-30', 'full', 'Transgender people were banned from serving in the military.'],
+           ['2019-04-12', '2021-01-25', 'full', 'A ban barred most transgender people from enlisting or serving as their gender.'],
+           ['2025-05-06', null, 'full', 'A new ban on transgender service members was in effect.']],
+    note: 'Transgender people were barred from serving until June 2016. A new ban took effect in April 2019 and was reversed in January 2021. A third ban took effect in May 2025, when the Supreme Court let it be enforced while lawsuits continue. In June 2026 an appeals court protected the plaintiffs already serving; for everyone else, and for recruits, the ban still applies.' }
+];
+LANES.forEach(l => { if (l.segs) l.segs = l.segs.map(([a, b, k, txt]) => ({ from: a ? parseDate(a) : null, to: b ? parseDate(b) : null, kind: k, txt })); });
+
+/* Milestones for the "How old" table. state: 'decrim' or 'marry' expands to one row per state on the page. */
+const MILESTONES = [
+  { d: '1969-06-28', t: 'Stonewall', sub: 'The riots that started the modern movement' },
+  { d: '1973-12-15', t: 'Psychiatrists stop calling it an illness' },
+  { d: '1981-06-05', t: 'The first report of AIDS' },
+  { d: '1996-07', t: 'HIV drugs that work', sub: 'Combination therapy' },
+  { d: '1997-04-30', t: 'Ellen comes out on TV' },
+  { state: 'decrim' },
+  { d: '2003-06-26', t: 'Gay sex legal everywhere', sub: 'Lawrence v. Texas' },
+  { d: '2004-05-17', t: 'The first legal same-sex weddings', sub: 'Massachusetts' },
+  { d: '2011-09-20', t: 'Gay troops serve openly', sub: '"Don\'t Ask, Don\'t Tell" ends' },
+  { state: 'marry' },
+  { d: '2015-06-26', t: 'Marriage in every state', sub: 'Obergefell v. Hodges' },
+  { d: '2020-06-15', t: 'Illegal to fire people for being LGBTQ+', sub: 'Bostock v. Clayton County' }
+];
+
+const EXAMPLES = [
+  { name: 'Nana', year: 1944, st: 'TX' },
+  { name: 'Mom', year: 1970, st: 'OH' },
+  { name: 'Sam', year: 2001, st: 'CA' }
+];
+
+const SOURCES = [
+  ['Sodomy laws in the United States (Wikipedia)', 'https://en.wikipedia.org/wiki/Sodomy_laws_in_the_United_States'],
+  ['Same-sex marriage in the United States (Wikipedia)', 'https://en.wikipedia.org/wiki/Same-sex_marriage_in_the_United_States'],
+  ['Timeline of LGBTQ history in the United States (Wikipedia)', 'https://en.wikipedia.org/wiki/Timeline_of_LGBTQ_history_in_the_United_States'],
+  ['Lawrence v. Texas, 539 U.S. 558 (2003)', 'https://supreme.justia.com/cases/federal/us/539/558/'],
+  ['Obergefell v. Hodges, 576 U.S. 644 (2015)', 'https://supreme.justia.com/cases/federal/us/576/644/'],
+  ['Bostock v. Clayton County, 590 U.S. 644 (2020)', 'https://supreme.justia.com/cases/federal/us/590/644/'],
+  ['CDC, "Pneumocystis Pneumonia — Los Angeles," MMWR, June 5, 1981', 'https://www.cdc.gov/mmwr/preview/mmwrhtml/june_5.htm'],
+  ['FDA, blood donor eligibility for men who have sex with men', 'https://www.fda.gov/vaccines-blood-biologics/blood-blood-products/questions-and-answers-blood-donor-eligibility']
+];
+
+/* ---------- people ---------- */
+let people = [];
+let isExample = false;
+let fromLink = false;
+let cursor = null;
+let activeCats = new Set(CATS.map(c => c[0]));
+let editing = null;
+let uid = 1;
+
+function sortPeople(){ people.sort((a, b) => a.year - b.year || a.id - b.id); }
+const colorOf = p => 'var(--p' + people.indexOf(p) + ')';
+const isYou = p => /^(you|me|i)$/i.test(p.name.trim());
+function subj(p){
+  const n = p.name.trim();
+  if (/^you$/i.test(n)) return { was: 'you were', born: 'you were born', poss: 'your' };
+  if (/^(me|i)$/i.test(n)) return { was: 'I was', born: 'I was born', poss: 'my' };
+  return { was: n + ' was', born: n + ' was born', poss: n + '’s' };
+}
+const ageAt = (p, t) => Math.floor(t) - p.year;
+
+function load(){
+  const h = location.hash.match(/(?:^#|&)p=([^&]+)/);
+  if (h) {
+    try {
+      const list = h[1].split(';').map(x => x.split(',').map(decodeURIComponent)).map(([name, y, st]) => ({ name: name.slice(0, 24), year: +y, st: STATES[st] ? st : '' }))
+        .filter(p => p.name && p.year >= 1900 && p.year <= THIS_YEAR).slice(0, MAX_PEOPLE);
+      if (list.length) { people = list.map(p => Object.assign({ id: uid++ }, p)); fromLink = true; sortPeople(); return; }
+    } catch (e) { /* fall through */ }
+  }
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORE) || 'null');
+    if (Array.isArray(saved) && saved.length) {
+      people = saved.filter(p => p && p.name && p.year >= 1900 && p.year <= THIS_YEAR).slice(0, MAX_PEOPLE).map(p => ({ id: uid++, name: String(p.name).slice(0, 24), year: +p.year, st: STATES[p.st] ? p.st : '' }));
+      if (people.length) { sortPeople(); return; }
+    }
+  } catch (e) { /* storage blocked or bad data */ }
+  useExamples();
+}
+function useExamples(){
+  people = EXAMPLES.map(p => Object.assign({ id: uid++ }, p));
+  isExample = true;
+  sortPeople();
+}
+function save(){
+  isExample = false;
+  if (fromLink) { fromLink = false; try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {} }
+  try { localStorage.setItem(STORE, JSON.stringify(people.map(p => ({ name: p.name, year: p.year, st: p.st })))); } catch (e) {}
+}
+
+/* ---------- state select ---------- */
+function fillStateSelect(sel, value){
+  const opts = ['<option value="">Skip, or outside the US</option>']
+    .concat(Object.values(STATES).sort((a, b) => a.name.localeCompare(b.name)).map(s => '<option value="' + s.code + '">' + esc(s.name) + '</option>'));
+  sel.innerHTML = opts.join('');
+  sel.value = value || '';
+}
+
+/* ---------- rendering: people ---------- */
+function renderPeople(){
+  const box = $('#people');
+  let h = people.map(p => '<button class="chip" type="button" data-id="' + p.id + '" aria-label="Edit ' + esc(p.name) + '"><span class="sw" style="background:' + colorOf(p) + '"></span>' + esc(p.name) + ' <small>' + p.year + (p.st ? ' · ' + p.st : '') + '</small></button>').join('');
+  h += '<button class="chip add" type="button" id="add"' + (people.length >= MAX_PEOPLE ? ' disabled' : '') + '>+ Add a person</button>';
+  if (fromLink) h += '<div class="people-note">Opened from a shared link. Any change you make is saved on this device.</div>';
+  else if (people.length >= MAX_PEOPLE) h += '<div class="people-note">Six people, six stripes. That’s the whole flag.</div>';
+  box.innerHTML = h;
+  $('#starter').hidden = !isExample;
+  $('#legend-dot').style.background = people[0] ? colorOf(people[0]) : 'var(--p0)';
+}
+
+/* ---------- rendering: chart ---------- */
+let chartGeom = null;
+function chartRange(){
+  const minB = Math.min.apply(null, people.map(p => p.year));
+  const start = Math.min(Math.floor((minB - 4) / 5) * 5, 1950);
+  return [Math.max(1900, start), NOW_T];
+}
+
+function laneActive(lane, t){
+  if (lane.kind === 'decrim') return crimeStates(t) > 0;
+  if (lane.kind === 'marry') return marryStates(t) < 50;
+  return lane.segs.find(s => (!s.from || s.from.t <= t) && (!s.to || t < s.to.t)) || null;
+}
+
+function renderChart(){
+  const box = $('#chart');
+  const W = Math.max(300, Math.round(box.clientWidth || 360));
+  const wide = W >= 700;
+  const labelW = wide ? 200 : 0;
+  const x0 = labelW + 4, x1 = W - 16;
+  const [t0, t1] = chartRange();
+  const X = t => x0 + (Math.max(t0, Math.min(t1, t)) - t0) / (t1 - t0) * (x1 - x0);
+  const out = [];
+  const defs = '<defs><pattern id="hatch" patternUnits="userSpaceOnUse" width="5" height="5" patternTransform="rotate(45)"><rect class="c-hatch" width="2.2" height="5"></rect></pattern></defs>';
+
+  let y = 0;
+  const axisY = 16;
+  const pxPerYear = (x1 - x0) / (t1 - t0);
+  const step = pxPerYear * 10 >= 46 ? 10 : 20;
+  const ticks = [];
+  for (let yr = Math.ceil(t0 / step) * step; yr <= t1; yr += step) ticks.push(yr);
+  y = axisY + 12;
+
+  // people lifelines
+  const lifeTop = y;
+  const nameRow = wide ? 0 : 17;
+  const lifeH = 11;
+  const lifeRow = wide ? 30 : 36;
+  people.forEach((p, i) => {
+    const cy = y + nameRow + lifeH / 2 + (wide ? 8 : 0);
+    const bx = X(p.year), ex = X(t1);
+    const col = colorOf(p);
+    if (wide) {
+      out.push('<text class="c-name" x="0" y="' + (cy + 5) + '">' + esc(p.name) + '<tspan class="c-name-sub" dx="8">' + p.year + (p.st ? ' · ' + p.st : '') + '</tspan></text>');
+    } else {
+      const anchorEnd = bx > x1 - 110;
+      out.push('<text class="c-name" x="' + (anchorEnd ? ex : bx) + '" y="' + (y + 13) + '"' + (anchorEnd ? ' text-anchor="end"' : '') + '>' + esc(p.name) + '<tspan class="c-name-sub" dx="6">' + p.year + (p.st ? ' · ' + p.st : '') + '</tspan></text>');
+    }
+    out.push('<rect x="' + bx.toFixed(1) + '" y="' + (cy - lifeH / 2) + '" width="' + Math.max(2, ex - bx).toFixed(1) + '" height="' + lifeH + '" rx="2" style="fill:' + col + '"></rect>');
+    for (let a = 10; p.year + a < t1; a += 10) {
+      out.push('<rect class="c-notch" x="' + (X(p.year + a) - 0.75).toFixed(1) + '" y="' + (cy - lifeH / 2 + 2) + '" width="1.5" height="' + (lifeH - 4) + '"></rect>');
+    }
+    y += lifeRow;
+  });
+  y += 12;
+
+  // lanes
+  const barH = 13;
+  const laneRow = wide ? 30 : 42;
+  const laneLabelH = wide ? 0 : 17;
+  const markers = [];
+  LANES.forEach(lane => {
+    const cy = y + laneLabelH + barH / 2 + (wide ? 8 : 2);
+    const top = cy - barH / 2;
+    const ongoing = lane.segs && lane.segs.some(s => !s.to);
+    const lx = wide ? 0 : x0, ly = wide ? cy + 5 : y + 13;
+    if (wide && ongoing) {
+      out.push('<text class="c-lane" x="0" y="' + (cy - 1) + '">' + esc(lane.label) + '</text><text class="c-lane-sub" x="0" y="' + (cy + 12) + '">in effect today</text>');
+    } else {
+      out.push('<text class="c-lane" x="' + lx + '" y="' + ly + '">' + esc(lane.label) + (ongoing ? '<tspan class="c-lane-sub" dx="8">in effect today</tspan>' : '') + '</text>');
+    }
+    out.push('<rect class="c-track" x="' + x0 + '" y="' + (cy - 0.5) + '" width="' + (x1 - x0) + '" height="1"></rect>');
+    if (lane.kind) {
+      const field = lane.kind === 'decrim' ? 'decrim' : 'marry';
+      const dates = FIFTY.map(s => s[field].t).filter(t => t > t0 && t < t1).sort((a, b) => a - b);
+      const cuts = [t0].concat(dates).concat([lane.kind === 'decrim' ? LAWRENCE.t : OBERGEFELL.t]);
+      for (let i = 0; i < cuts.length - 1; i++) {
+        const a = cuts[i], b = cuts[i + 1];
+        if (b <= a) continue;
+        const mid = (a + b) / 2;
+        const n = lane.kind === 'decrim' ? crimeStates(mid) : 50 - marryStates(mid);
+        if (n <= 0) continue;
+        const h = Math.max(2, barH * n / 50);
+        out.push('<rect class="c-bar" x="' + X(a).toFixed(2) + '" y="' + (cy - h / 2).toFixed(2) + '" width="' + Math.max(0.6, X(b) - X(a) + 0.3).toFixed(2) + '" height="' + h.toFixed(2) + '"></rect>');
+      }
+      people.forEach(p => {
+        if (!p.st) return;
+        const d = STATES[p.st][field];
+        if (d.t > t0 && d.t < t1) markers.push('<circle class="c-mark" cx="' + X(d.t).toFixed(1) + '" cy="' + cy + '" r="5" style="fill:' + colorOf(p) + '"><title>' + esc(STATES[p.st].name) + ', ' + esc(fmtDate(d)) + '</title></circle>');
+      });
+    } else {
+      lane.segs.forEach(s => {
+        const a = s.from ? s.from.t : t0, b = s.to ? s.to.t : t1;
+        if (b <= t0) return;
+        out.push('<rect class="' + (s.kind === 'part' ? 'c-part' : 'c-bar') + '" x="' + X(a).toFixed(2) + '" y="' + top + '" width="' + Math.max(1, X(b) - X(a)).toFixed(2) + '" height="' + barH + '"></rect>');
+      });
+    }
+    y += laneRow;
+  });
+  const H = y + 4;
+
+  // grid + ticks (drawn first)
+  const grid = ticks.map(yr => '<line class="c-grid" x1="' + X(yr).toFixed(1) + '" x2="' + X(yr).toFixed(1) + '" y1="' + (axisY + 4) + '" y2="' + H + '"></line><text class="c-tick" x="' + X(yr).toFixed(1) + '" y="' + axisY + '" text-anchor="middle">' + yr + '</text>').join('');
+  const nowTxt = '<text class="c-now" x="' + x1 + '" y="' + H + '" text-anchor="end" dy="12">now</text>';
+
+  chartGeom = { X, t0, t1, x0, x1, W, H, axisY };
+  box.innerHTML = '<svg id="svg" viewBox="0 -2 ' + W + ' ' + (H + 16) + '" width="' + W + '" height="' + (H + 16) + '" role="img" aria-label="Lifelines of the people on this page, above bars showing when anti-LGBTQ+ rules were in effect in the US">' + defs + grid + out.join('') + markers.join('') + nowTxt + '<g id="cursor"></g></svg>';
+  drawCursor();
+}
+
+function drawCursor(){
+  if (!chartGeom) return;
+  const g = $('#cursor'); if (!g) return;
+  const { X, H, axisY } = chartGeom;
+  const x = X(cursor);
+  const pillW = 42;
+  const px = Math.max(chartGeom.x0 - 4, Math.min(chartGeom.W - pillW, x - pillW / 2));
+  g.innerHTML = '<line class="c-cursor" x1="' + x.toFixed(1) + '" x2="' + x.toFixed(1) + '" y1="' + (axisY + 6) + '" y2="' + H + '"></line>' +
+    '<rect class="c-cursor-pill" x="' + px.toFixed(1) + '" y="' + (axisY - 13) + '" width="' + pillW + '" height="18" rx="9"></rect>' +
+    '<text class="c-cursor-txt" x="' + (px + pillW / 2).toFixed(1) + '" y="' + (axisY) + '" text-anchor="middle">' + cursor + '</text>';
+}
+
+function setCursor(yr, fromInput){
+  const [t0] = chartRange();
+  yr = Math.max(Math.ceil(t0), Math.min(THIS_YEAR, Math.round(yr)));
+  if (yr === cursor && fromInput !== 'force') return;
+  cursor = yr;
+  const r = $('#year');
+  r.min = Math.ceil(t0); r.max = THIS_YEAR;
+  if (fromInput !== true) r.value = yr;
+  drawCursor();
+  renderReadout();
+}
+
+function bindChart(){
+  const box = $('#chart');
+  let dragging = false, start = null;
+  const toYear = e => {
+    const svg = $('#svg'); if (!svg || !chartGeom) return null;
+    const rect = svg.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * (chartGeom.W / rect.width);
+    const { t0, t1, x0, x1 } = chartGeom;
+    return t0 + (x - x0) / (x1 - x0) * (t1 - t0);
+  };
+  const move = e => { const t = toYear(e); if (t != null) setCursor(Math.floor(t)); };
+  // Mouse: drag from the first press. Touch: wait to see a sideways drag or a tap, so scrolling past the chart doesn't move the year.
+  box.addEventListener('pointerdown', e => {
+    start = { x: e.clientX, y: e.clientY };
+    if (e.pointerType === 'mouse') { dragging = true; try { box.setPointerCapture(e.pointerId); } catch (err) {} move(e); }
+  });
+  box.addEventListener('pointermove', e => {
+    if (!start) return;
+    if (!dragging) {
+      const dx = Math.abs(e.clientX - start.x), dy = Math.abs(e.clientY - start.y);
+      if (dx > 6 && dx > dy) { dragging = true; try { box.setPointerCapture(e.pointerId); } catch (err) {} }
+      else return;
+    }
+    move(e);
+  });
+  box.addEventListener('pointerup', e => {
+    if (!dragging && start && Math.abs(e.clientX - start.x) < 8 && Math.abs(e.clientY - start.y) < 8) move(e);
+    dragging = false; start = null;
+  });
+  box.addEventListener('pointercancel', () => { dragging = false; start = null; });
+  $('#year').addEventListener('input', e => setCursor(+e.target.value, true));
+}
+
+/* ---------- rendering: readout ---------- */
+function statesOnPage(){
+  const m = new Map();
+  people.forEach(p => { if (p.st) { if (!m.has(p.st)) m.set(p.st, []); m.get(p.st).push(p); } });
+  return m;
+}
+const nameIn = p => /^you$/i.test(p.name.trim()) ? 'you' : /^(me|i)$/i.test(p.name.trim()) ? 'I' : p.name;
+const namesOf = list => list.map(nameIn).join(' & ');
+
+function agesHTML(t, cls, bornOnly){
+  return '<div class="ages ' + (cls || '') + '">' + people.map(p => {
+    const a = Math.floor(t) - p.year;
+    if (a < 0 && bornOnly) return '';
+    if (a < 0) return '<span class="age unborn"><span class="dot" style="color:' + colorOf(p) + '"></span>' + esc(p.name) + ' in ' + plural(-a, 'year') + '</span>';
+    return '<span class="age"><span class="dot" style="background:' + colorOf(p) + '"></span>' + esc(p.name) + ' ' + (a === 0 ? 'born' : a) + '</span>';
+  }).join('') + '</div>';
+}
+
+function renderReadout(){
+  const t = cursor;       // the moment the year began
+  const tEnd = cursor + 1;
+  const born = people.filter(p => p.year === cursor);
+  let capTxt = '';
+  if (born.length === 1) capTxt = 'The year ' + subj(born[0]).born;
+  else if (born.length > 1) capTxt = 'The year ' + namesOf(born) + ' were born';
+  const sts = statesOnPage();
+  const rules = [];
+  LANES.forEach(lane => {
+    if (lane.kind === 'decrim') {
+      const n = crimeStates(t);
+      if (!n) return;
+      let txt = n === 50 ? 'Gay sex was a crime in every state.' : 'Gay sex was a crime in ' + n + ' of 50 states.';
+      const notes = [];
+      sts.forEach((ps, st) => {
+        const S = STATES[st];
+        notes.push(S.name + ' (' + namesOf(ps) + '): ' + (S.decrim.t > t ? 'a crime until ' + S.decrim.y : 'legal since ' + S.decrim.y));
+      });
+      rules.push({ txt, notes });
+    } else if (lane.kind === 'marry') {
+      const n = marryStates(t);
+      if (n >= 50) return;
+      let txt = n === 0 ? 'No state let same-sex couples marry.' : 'Same-sex couples could marry in only ' + plural(n, 'state') + '.';
+      const notes = [];
+      sts.forEach((ps, st) => {
+        const S = STATES[st];
+        notes.push(S.name + ' (' + namesOf(ps) + '): ' + (S.marry.t > t ? 'not until ' + S.marry.y : 'yes, since ' + S.marry.y));
+      });
+      rules.push({ txt, notes });
+    } else {
+      const s = laneActive(lane, t);
+      if (s) rules.push({ txt: s.txt, notes: [] });
+    }
+  });
+  const evs = allEvents().filter(e => e.date.y === cursor);
+  let h = '<div class="ro-top"><div class="ro-year">' + cursor + '</div>' + (capTxt ? '<div class="ro-cap">' + esc(capTxt) + '</div>' : '') + '</div>';
+  h += agesHTML(t + 0.5);
+  h += '<div class="ro-cols"><div><h3>As ' + cursor + ' began</h3>';
+  h += rules.length ? '<ul>' + rules.map(r => '<li>' + esc(r.txt) + r.notes.map(n => '<span class="st">' + esc(n) + '</span>').join('') + '</li>').join('') + '</ul>'
+                    : '<p class="ro-empty">None of the rules on the chart were in effect.</p>';
+  h += '</div><div><h3>During ' + cursor + '</h3>';
+  h += evs.length ? '<ul>' + evs.map(e => '<li class="ro-ev">' + esc(e.title) + (e.st ? ' <span class="st">' + esc(STATES[e.st].name) + '</span>' : '') + '</li>').join('') + '</ul>'
+                  : '<p class="ro-empty">Nothing on this timeline. Drag to another year.</p>';
+  h += '</div></div>';
+  $('#readout').innerHTML = h;
+}
+
+/* ---------- events incl. per-state ---------- */
+let _evCache = null, _evKey = '';
+function allEvents(){
+  const key = [...statesOnPage().keys()].sort().join(',');
+  if (_evCache && _evKey === key) return _evCache;
+  const list = EVENTS.map(e => Object.assign({}, e));
+  const sts = statesOnPage();
+  sts.forEach((ps, st) => {
+    const S = STATES[st];
+    if (S.decrimHow === 'lawrence') {
+      const law = list.find(e => e.date.s === '2003-06-26' && !e.st);
+      if (law) (law.notes = law.notes || []).push({ ps, txt: 'This ended the law in ' + S.name + ', where ' + namesOf(ps) + ' grew up.' + (S.note ? ' ' + S.note : '') });
+    } else {
+      list.push({ date: S.decrim, cat: 'rights', tone: '+', st, title: S.decrimHow === 'court' ? 'A court strikes down the sodomy law' : 'The sodomy law is repealed',
+        blurb: (S.decrimHow === 'court' ? 'A ruling means sex between consenting adults of the same sex can no longer be prosecuted in ' + S.name + '.' : S.name + '’s legislature takes sex between consenting adults of the same sex out of its criminal law.') + (S.note ? ' ' + S.note : ''),
+        notes: [{ ps, txt: '' }] });
+    }
+    S.windows.forEach(w => {
+      list.push({ date: w.from, cat: 'rights', tone: '.', st, title: w.title, blurb: w.blurb, notes: [{ ps, txt: '' }] });
+    });
+    if (S.unions && S.unions.date.t < S.marry.t) {
+      list.push({ date: S.unions.date, cat: 'rights', tone: '+', st, title: cap(S.unions.kind),
+        blurb: S.name + ' gives same-sex couples ' + S.unions.kind + ', a legal status short of marriage.', notes: [{ ps, txt: '' }] });
+    }
+    if (S.marryHow === 'obergefell') {
+      const ob = list.find(e => e.date.s === '2015-06-26' && !e.st);
+      if (ob) (ob.notes = ob.notes || []).push({ ps, txt: 'This brought marriage to ' + S.name + ', where ' + namesOf(ps) + ' grew up.' });
+    } else {
+      const how = { court: 'A state court ruling', legislature: 'A law passed by the legislature', ballot: 'A vote of the people', 'federal-court': 'A federal court ruling' }[S.marryHow] || 'A change in the law';
+      list.push({ date: S.marry, cat: 'rights', tone: '+', st, title: 'Same-sex couples can marry',
+        blurb: how + ' opens marriage to same-sex couples in ' + S.name + '.', notes: [{ ps, txt: '' }] });
+    }
+  });
+  list.sort((a, b) => a.date.t - b.date.t);
+  _evCache = list; _evKey = key;
+  return list;
+}
+
+/* ---------- rendering: ages ---------- */
+function sentence(p, when, what){
+  // what: a clause like "gay sex stopped being a crime in Texas"
+  const s = subj(p);
+  const a = ageAt(p, when.t);
+  if (a > 0) return cap(s.was) + ' ' + a + ' when ' + what + '.';
+  if (a === 0) return cap(s.born) + ' the year ' + what + '.';
+  return cap(what) + ' ' + plural(-a, 'year') + ' before ' + s.born + '.';
+}
+function renderAges(){
+  const hl = people.map(p => {
+    const S = p.st ? STATES[p.st] : null;
+    const crime = S ? { d: S.decrim, w: 'gay sex stopped being a crime in ' + S.name } : { d: LAWRENCE, w: 'the Supreme Court struck down the last sodomy laws' };
+    const mar = S ? { d: S.marry, w: 'same-sex couples could marry there' } : { d: OBERGEFELL, w: 'same-sex couples could marry in every state' };
+    const a1 = ageAt(p, crime.d.t), a2 = ageAt(p, mar.d.t);
+    const txt = a1 > 0 && a2 > 0
+      ? cap(subj(p).was) + ' ' + a1 + ' when ' + crime.w + ', and ' + a2 + ' when ' + mar.w + '.'
+      : sentence(p, crime.d, crime.w) + ' ' + sentence(p, mar.d, mar.w);
+    return '<li><span class="sw" style="background:' + colorOf(p) + '"></span><span>' + esc(txt) + '</span></li>';
+  });
+  $('#headlines').innerHTML = hl.join('');
+
+  const sts = statesOnPage();
+  const rows = [];
+  MILESTONES.forEach(m => {
+    if (m.state) {
+      sts.forEach((ps, st) => {
+        const S = STATES[st];
+        const d = m.state === 'decrim' ? S.decrim : S.marry;
+        const how = m.state === 'decrim' ? S.decrimHow : S.marryHow;
+        if (how === 'lawrence' || how === 'obergefell') return; // same day as the national row
+        rows.push({ date: d, t: m.state === 'decrim' ? 'Gay sex legal in ' + S.name : 'Marriage in ' + S.name, sub: 'Where ' + namesOf(ps) + ' grew up', mark: ps });
+      });
+    } else rows.push({ date: parseDate(m.d), t: m.t, sub: m.sub });
+  });
+  rows.sort((a, b) => a.date.t - b.date.t);
+  let h = '<thead><tr><th scope="col"><span class="sw" style="background:transparent"></span>Turning point</th>' + people.map(p => '<th scope="col"><span class="sw" style="background:' + colorOf(p) + '"></span>' + esc(p.name) + '<small>b. ' + p.year + '</small></th>').join('') + '</tr></thead><tbody>';
+  rows.forEach(r => {
+    h += '<tr><th scope="row">' + esc(r.t) + '<small>' + esc(fmtDate(r.date)) + (r.sub ? ' · ' + esc(r.sub) : '') + '</small></th>';
+    people.forEach(p => {
+      const a = ageAt(p, r.date.t);
+      if (a < 0) h += '<td class="unborn" title="Born ' + plural(-a, 'year') + ' later">not born</td>';
+      else h += '<td>' + (a === 0 ? '0' : a) + (a === 0 ? '<small>born that year</small>' : '') + '</td>';
+    });
+    h += '</tr>';
+  });
+  h += '</tbody>';
+  $('#ages-table').innerHTML = h;
+}
+
+/* ---------- rendering: year by year ---------- */
+function renderFilters(){
+  const all = activeCats.size === CATS.length;
+  $('#filters').innerHTML = '<button class="fchip" type="button" data-cat="*" aria-pressed="' + all + '">Everything</button>' +
+    CATS.map(([k, label]) => '<button class="fchip" type="button" data-cat="' + k + '" aria-pressed="' + (!all && activeCats.has(k)) + '">' + esc(label) + '</button>').join('');
+}
+function evHTML(e){
+  const cls = 'ev ' + (e.tone === '+' ? 'up' : e.tone === '-' ? 'down' : 'mid') + (e.st ? ' state' : '');
+  const glyph = e.tone === '+' ? '▲' : e.tone === '-' ? '▼' : '●';
+  const when = fmtDate(e.date, false);
+  let notes = '';
+  (e.notes || []).forEach(n => {
+    const who = n.ps.map(p => '<span class="dot" style="background:' + colorOf(p) + '"></span>').join('');
+    const where = e.st ? 'Where ' + esc(namesOf(n.ps)) + ' grew up.' : esc(n.txt);
+    notes += '<div class="ev-note">' + who + '<span>' + where + '</span></div>';
+  });
+  return '<li class="' + cls + '"><span class="glyph" aria-hidden="true">' + glyph + '</span><div>' +
+    '<div class="ev-meta">' + (when ? esc(when) + ' · ' : '') + esc(CAT_LABEL[e.cat] || e.cat) + '</div>' +
+    '<div class="ev-t"' + (e.st ? ' data-st="' + esc(STATES[e.st].name) + '"' : '') + '>' + esc(e.title) + '</div>' +
+    '<p>' + esc(e.blurb) + '</p>' + notes + '</div></li>';
+}
+function renderYears(){
+  const list = allEvents().filter(e => activeCats.has(e.cat));
+  const oldest = people[0];
+  const before = list.filter(e => e.date.y < oldest.year);
+  const during = list.filter(e => e.date.y >= oldest.year);
+  let h = '';
+  if (before.length) {
+    h += '<details class="before"><summary>Before ' + esc(oldest.name) + ' was born<small>' + plural(before.length, 'event') + ', ' + before[0].date.y + '–' + before[before.length - 1].date.y + '</small></summary>' + groupHTML(before, false) + '</details>';
+  }
+  h += groupHTML(during, true);
+  if (!list.length) h = '<p class="none">No events match. Turn on a category above.</p>';
+  $('#years').innerHTML = h;
+  const decades = [...new Set(during.map(e => Math.floor(e.date.y / 10) * 10))];
+  $('#decades').innerHTML = decades.map(d => '<a href="#y' + d + '" data-decade="' + d + '">' + d + 's</a>').join('');
+}
+function groupHTML(list, withAges){
+  const byYear = new Map();
+  list.forEach(e => { if (!byYear.has(e.date.y)) byYear.set(e.date.y, []); byYear.get(e.date.y).push(e); });
+  let h = '';
+  byYear.forEach((evs, yr) => {
+    h += '<div class="yr" id="y' + yr + '"><div class="yr-h"><button class="y" type="button" data-year="' + yr + '" title="Show ' + yr + ' on the lifelines">' + yr + '</button>' + (withAges ? agesHTML(yr + 0.5, '', true) : '') + '</div><ul class="evs">' + evs.map(evHTML).join('') + '</ul></div>';
+  });
+  return h;
+}
+
+/* ---------- about ---------- */
+function renderAbout(){
+  $('#lane-notes').innerHTML = LANES.map(l => '<dt>' + esc(l.label) + '</dt><dd>' + esc(l.note) + '</dd>').join('');
+  $('#sources').innerHTML = SOURCES.map(([t, u]) => '<li><a href="' + esc(u) + '" target="_blank" rel="noopener">' + esc(t) + '</a></li>').join('');
+}
+
+/* ---------- editing ---------- */
+const dlg = $('#edit');
+function openEdit(p){
+  editing = p || null;
+  $('#edit-h').textContent = p ? 'Edit ' + p.name : 'Add a person';
+  $('#e-name').value = p ? p.name : '';
+  $('#e-year').value = p ? p.year : '';
+  $('#e-year').max = THIS_YEAR;
+  fillStateSelect($('#e-state'), p ? p.st : '');
+  $('#e-remove').hidden = !p || people.length <= 1;
+  $('#e-err').textContent = '';
+  if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+  setTimeout(() => $('#e-name').focus(), 30);
+}
+function closeEdit(){ if (dlg.close) dlg.close(); else dlg.removeAttribute('open'); }
+$('#edit-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const name = $('#e-name').value.trim().slice(0, 24);
+  const year = parseInt($('#e-year').value, 10);
+  if (!name) { $('#e-err').textContent = 'Give this person a name or a label, like "Grandpa".'; return; }
+  if (!(year >= 1900 && year <= THIS_YEAR)) { $('#e-err').textContent = 'Enter a birth year between 1900 and ' + THIS_YEAR + '.'; return; }
+  const st = $('#e-state').value;
+  if (isExample && !editing) people = [];      // adding someone new replaces the examples; editing one keeps them
+  if (editing && people.includes(editing)) Object.assign(editing, { name, year, st });
+  else if (people.length < MAX_PEOPLE) people.push({ id: uid++, name, year, st });
+  sortPeople(); save(); closeEdit(); renderAll(true);
+});
+$('#e-cancel').addEventListener('click', closeEdit);
+$('#e-remove').addEventListener('click', () => {
+  if (!editing) return;
+  people = people.filter(p => p !== editing);
+  save(); closeEdit(); renderAll(true);
+});
+$('#people').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.id === 'add') openEdit(null);
+  else { const p = people.find(x => x.id === +b.dataset.id); if (p) openEdit(p); }
+});
+$('#starter-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const year = parseInt($('#s-year').value, 10);
+  if (!(year >= 1900 && year <= THIS_YEAR)) { $('#s-year').focus(); return; }
+  people = [{ id: uid++, name: 'You', year, st: $('#s-state').value }];
+  save(); renderAll(true);
+});
+$('#filters').addEventListener('click', e => {
+  const b = e.target.closest('.fchip'); if (!b) return;
+  const k = b.dataset.cat;
+  if (k === '*') activeCats = new Set(CATS.map(c => c[0]));
+  else if (activeCats.size === CATS.length) activeCats = new Set([k]);   // from everything: show only this kind
+  else if (activeCats.has(k)) { activeCats.delete(k); if (!activeCats.size) activeCats = new Set(CATS.map(c => c[0])); }
+  else activeCats.add(k);
+  renderFilters(); renderYears();
+});
+$('#decades').addEventListener('click', e => {
+  const a = e.target.closest('a'); if (!a) return;
+  e.preventDefault();
+  const d = +a.dataset.decade;
+  const el = [...document.querySelectorAll('#years > .yr')].find(x => +x.id.slice(1) >= d);
+  if (el) el.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+});
+$('#years').addEventListener('click', e => {
+  const b = e.target.closest('button.y'); if (!b) return;
+  setCursor(+b.dataset.year);
+  $('#lifelines').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+});
+$('#reset').addEventListener('click', () => {
+  try { localStorage.removeItem(STORE); } catch (e) {}
+  fromLink = false;
+  try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+  useExamples(); renderAll(true);
+});
+
+/* sharing: only where the page has its own address bar */
+const framed = (() => { try { return window.top !== window.self; } catch (e) { return true; } })();
+if (!framed) {
+  $('#share-row').hidden = false;
+  $('#share').addEventListener('click', () => {
+    const hash = 'p=' + people.map(p => [p.name, p.year, p.st || ''].map(encodeURIComponent).join(',')).join(';');
+    const url = location.origin + location.pathname + '#' + hash;
+    const msg = $('#share-msg');
+    const done = () => { msg.textContent = 'Link copied. Anyone who opens it sees these lifelines.'; };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, () => { msg.textContent = url; });
+    else msg.textContent = url;
+  });
+}
+
+/* ---------- boot ---------- */
+function renderAll(resetCursor){
+  _evCache = null;
+  renderPeople();
+  if (resetCursor || cursor == null) {
+    const first = people.find(isYou) || people[people.length - 1];
+    cursor = first.year;
+  }
+  renderChart();
+  setCursor(cursor, 'force');
+  renderAges();
+  renderYears();
+}
+load();
+fillStateSelect($('#s-state'), '');
+$('#s-year').max = THIS_YEAR;
+renderFilters();
+renderAbout();
+bindChart();
+renderAll(true);
+let rz = null, lastW = $('#chart').clientWidth;
+new ResizeObserver(() => {
+  const w = $('#chart').clientWidth;
+  if (w === lastW) return;
+  lastW = w; clearTimeout(rz); rz = setTimeout(renderChart, 60);
+}).observe($('#chart'));
+})();
+</script>
+</body>
+</html>
