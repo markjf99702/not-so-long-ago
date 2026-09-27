@@ -1,0 +1,9 @@
+{
+  "name": "not-so-long-ago",
+  "private": true,
+  "type": "module",
+  "description": "LGBTQ+ history, laid across your life and your family's.",
+  "scripts": {
+    "test": "node test/e2e.mjs"
+  }
+}

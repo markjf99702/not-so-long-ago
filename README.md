@@ -1,15 +1,37 @@
 # Not So Long Ago
 
-LGBTQ+ history, laid across your own life and the lives of the people you love.
+**Use it: [junkdrawer.works/not-so-long-ago](https://junkdrawer.works/not-so-long-ago/)**
+
+**LGBTQ+ history, laid across your own life and the lives of the people you love.**
 
 Put in up to six people (you, a parent, a grandparent, a partner, a kid) with the year each was born and the state they grew up in. The page draws a lifeline for each of them above bars showing when US rules against LGBTQ+ people were in effect: when gay sex was a crime, when psychiatry called it an illness, when gay people were barred from federal jobs and the military, when same-sex couples couldn't marry. Then it tells you how old each of you was when each rule changed.
 
 - **Lifelines.** Drag across the chart, or use the year slider, to see any year: who was how old, which rules still held (with a count of states for the state-by-state ones, and the status in each person's home state), and what happened that year.
 - **How old were you?** The turning points in a table, one column per person, plus a sentence for each person about their own state.
 - **Year by year.** About 150 events from 1924 to 2026, filterable by kind (law, organizing, health and HIV, trans lives, politics, culture, around the world), with each person's age at the top of every year. Events for each person's home state (when its sodomy law ended, when marriage came) are added automatically.
-- **Share.** Copies a link with the people in it, so a family can open the same lifelines. Nothing is sent anywhere; the people are saved in the browser.
+- **Share.** Copies a link with the people in it, so a family can open the same lifelines.
+- No account and no server. The people you put in stay in your browser. It works offline and installs to a phone's home screen.
 
-It's one file, `index.html`, with no build step.
+## Running it
+
+It's a static site: plain HTML, CSS and JavaScript, with no build step. The whole app is `index.html`.
+
+```sh
+npx serve .                   # or any static file server, then open the printed address
+npm test                      # uses it in Chromium through the real page (needs Playwright)
+node tools/make-icons.mjs     # redraws the PNG icons from icon.svg
+```
+
+To put it online with GitHub Pages: **Settings → Pages → Build and deployment → Deploy from a branch**, then pick `main` and `/ (root)`.
+
+### Files
+
+- `index.html`: the page, its styles and script, and the data (see below).
+- `fonts/`: Big Shoulders Display, Big Shoulders Text, Source Serif 4 and IBM Plex Mono (SIL Open Font License), served from here so nothing loads from elsewhere.
+- `sw.js`: keeps a copy for using offline.
+- `manifest.webmanifest`, `icon.svg`, `icon-*.png`: for installing it to a home screen. `tools/icon-full-bleed.svg` is the square version for the maskable and Apple icons.
+- `og.png`: the picture shown when a link is shared.
+- `test/e2e.mjs`: puts people on the lifelines, moves through the years and filters the list, then checks it fits a phone and works offline.
 
 ## The data
 
