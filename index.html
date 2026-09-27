@@ -221,6 +221,11 @@ details.before[open] summary{margin-bottom:6px}
 .share-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:18px}
 .share-row span{font:400 13px var(--mono);color:var(--muted)}
 
+/* Footer */
+.jd-foot{margin-top:36px;padding-bottom:env(safe-area-inset-bottom,0px);font:400 13px/1.5 var(--mono);color:var(--muted);text-align:center}
+.jd-foot a{color:var(--ink-2);text-decoration:none}
+.jd-foot a:hover,.jd-foot a:focus-visible{text-decoration:underline;text-underline-offset:3px}
+
 /* Dialog */
 dialog{border:1.5px solid var(--rule);border-radius:14px;padding:0;background:var(--panel);color:var(--ink);width:min(420px,calc(100vw - 32px));box-shadow:0 20px 60px rgba(20,10,30,.35)}
 dialog::backdrop{background:rgba(20,14,28,.5)}
@@ -321,6 +326,12 @@ dialog .row .right{display:flex;gap:10px;margin-left:auto}
     <button class="btn quiet" id="reset" type="button">Start over with the examples</button>
   </div>
 </section>
+
+<footer class="jd-foot">
+  <a href="https://junkdrawer.works/">Part of junkdrawer.works</a>
+  <span aria-hidden="true">·</span>
+  <a href="https://junkdrawer.works/privacy.html">Privacy</a>
+</footer>
 
 </div>
 
