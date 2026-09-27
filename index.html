@@ -855,7 +855,7 @@ function renderChart(){
   const H = y + 4;
 
   // grid + ticks (drawn first)
-  const grid = ticks.map(yr => '<line class="c-grid" x1="' + X(yr).toFixed(1) + '" x2="' + X(yr).toFixed(1) + '" y1="' + (axisY + 4) + '" y2="' + H + '"></line><text class="c-tick" x="' + X(yr).toFixed(1) + '" y="' + axisY + '" text-anchor="middle">' + yr + '</text>').join('');
+  const grid = ticks.map(yr => '<line class="c-grid" x1="' + X(yr).toFixed(1) + '" x2="' + X(yr).toFixed(1) + '" y1="' + (axisY + 4) + '" y2="' + H + '"></line><text class="c-tick" data-x="' + X(yr).toFixed(1) + '" x="' + X(yr).toFixed(1) + '" y="' + axisY + '" text-anchor="middle">' + yr + '</text>').join('');
   const nowTxt = '<text class="c-now" x="' + x1 + '" y="' + H + '" text-anchor="end" dy="12">now</text>';
 
   chartGeom = { X, t0, t1, x0, x1, W, H, axisY };
@@ -870,6 +870,8 @@ function drawCursor(){
   const x = X(cursor);
   const pillW = 42;
   const px = Math.max(chartGeom.x0 - 4, Math.min(chartGeom.W - pillW, x - pillW / 2));
+  // hide any decade label the year tag would cover
+  document.querySelectorAll('#svg .c-tick').forEach(t => { t.style.opacity = Math.abs(+t.dataset.x - (px + pillW / 2)) < pillW / 2 + 16 ? 0 : ''; });
   g.innerHTML = '<line class="c-cursor" x1="' + x.toFixed(1) + '" x2="' + x.toFixed(1) + '" y1="' + (axisY + 6) + '" y2="' + H + '"></line>' +
     '<rect class="c-cursor-pill" x="' + px.toFixed(1) + '" y="' + (axisY - 13) + '" width="' + pillW + '" height="18" rx="9"></rect>' +
     '<text class="c-cursor-txt" x="' + (px + pillW / 2).toFixed(1) + '" y="' + (axisY) + '" text-anchor="middle">' + cursor + '</text>';
