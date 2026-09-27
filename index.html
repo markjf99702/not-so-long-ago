@@ -8,6 +8,7 @@
 <meta property="og:title" content="Not So Long Ago">
 <meta property="og:description" content="LGBTQ+ history, laid across your life and your family's. How old were you when it stopped being a crime?">
 <meta property="og:image" content="https://junkdrawer.works/not-so-long-ago/og.png">
+<meta property="og:url" content="https://junkdrawer.works/not-so-long-ago/">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#F4F2F7">
@@ -291,7 +292,16 @@ dialog .row .right{display:flex;gap:10px;margin-left:auto}
       <p>Each lifeline takes a stripe of Gilbert Baker's 1978 rainbow flag, oldest person first. Baker said red stood for life.</p>
       <p>Nothing you enter leaves this device. It's saved in this browser so it's here next time.</p>
       <h3>Sources</h3>
-      <ul id="sources"></ul>
+      <ul>
+        <li><a href="https://en.wikipedia.org/wiki/Sodomy_laws_in_the_United_States" target="_blank" rel="noopener">Sodomy laws in the United States (Wikipedia)</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Same-sex_marriage_in_the_United_States" target="_blank" rel="noopener">Same-sex marriage in the United States (Wikipedia)</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Timeline_of_LGBTQ_history_in_the_United_States" target="_blank" rel="noopener">Timeline of LGBTQ history in the United States (Wikipedia)</a></li>
+        <li><a href="https://supreme.justia.com/cases/federal/us/539/558/" target="_blank" rel="noopener">Lawrence v. Texas, 539 U.S. 558 (2003)</a></li>
+        <li><a href="https://supreme.justia.com/cases/federal/us/576/644/" target="_blank" rel="noopener">Obergefell v. Hodges, 576 U.S. 644 (2015)</a></li>
+        <li><a href="https://supreme.justia.com/cases/federal/us/590/644/" target="_blank" rel="noopener">Bostock v. Clayton County, 590 U.S. 644 (2020)</a></li>
+        <li><a href="https://www.cdc.gov/mmwr/preview/mmwrhtml/june_5.htm" target="_blank" rel="noopener">CDC, "Pneumocystis Pneumonia — Los Angeles," MMWR, June 5, 1981</a></li>
+        <li><a href="https://www.fda.gov/vaccines-blood-biologics/blood-blood-products/questions-and-answers-blood-donor-eligibility" target="_blank" rel="noopener">FDA, blood donor eligibility for men who have sex with men</a></li>
+      </ul>
     </div>
   </div>
   <div class="share-row" id="share-row" hidden>
@@ -664,16 +674,6 @@ const EXAMPLES = [
   { name: 'Sam', year: 2001, st: 'CA' }
 ];
 
-const SOURCES = [
-  ['Sodomy laws in the United States (Wikipedia)', 'https://en.wikipedia.org/wiki/Sodomy_laws_in_the_United_States'],
-  ['Same-sex marriage in the United States (Wikipedia)', 'https://en.wikipedia.org/wiki/Same-sex_marriage_in_the_United_States'],
-  ['Timeline of LGBTQ history in the United States (Wikipedia)', 'https://en.wikipedia.org/wiki/Timeline_of_LGBTQ_history_in_the_United_States'],
-  ['Lawrence v. Texas, 539 U.S. 558 (2003)', 'https://supreme.justia.com/cases/federal/us/539/558/'],
-  ['Obergefell v. Hodges, 576 U.S. 644 (2015)', 'https://supreme.justia.com/cases/federal/us/576/644/'],
-  ['Bostock v. Clayton County, 590 U.S. 644 (2020)', 'https://supreme.justia.com/cases/federal/us/590/644/'],
-  ['CDC, "Pneumocystis Pneumonia — Los Angeles," MMWR, June 5, 1981', 'https://www.cdc.gov/mmwr/preview/mmwrhtml/june_5.htm'],
-  ['FDA, blood donor eligibility for men who have sex with men', 'https://www.fda.gov/vaccines-blood-biologics/blood-blood-products/questions-and-answers-blood-donor-eligibility']
-];
 
 /* ---------- people ---------- */
 let people = [];
@@ -1114,7 +1114,6 @@ function groupHTML(list, withAges){
 /* ---------- about ---------- */
 function renderAbout(){
   $('#lane-notes').innerHTML = LANES.map(l => '<dt>' + esc(l.label) + '</dt><dd>' + esc(l.note) + '</dd>').join('');
-  $('#sources').innerHTML = SOURCES.map(([t, u]) => '<li><a href="' + esc(u) + '" target="_blank" rel="noopener">' + esc(t) + '</a></li>').join('');
 }
 
 /* ---------- editing ---------- */
