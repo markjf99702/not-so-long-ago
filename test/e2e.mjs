@@ -80,6 +80,10 @@ await plainYear.hover();
 assert.deepEqual(await plainYear.evaluate(el => [getComputedStyle(el).cursor, getComputedStyle(el).color]), ['auto', plainColor], 'a plain year should not look clickable');
 await page.click('#years button.y[data-year="1969"]');
 assert.equal(await page.textContent('.ro-year'), '1969');
+// The open group stays open when the list is filtered.
+await page.click('.fchip[data-cat="culture"]');
+assert.equal(await page.$eval('#years details.before', el => el.open), true, 'the Before group folded shut when filtered');
+await page.click('.fchip[data-cat="*"]');
 
 // Add someone to compare with. Saving too early says what's missing, in the page's own words, one thing at a time.
 await page.click('#add');
