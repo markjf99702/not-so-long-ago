@@ -79,6 +79,8 @@ assert.equal(await page.textContent('.ro-year'), '1969');
 
 // Add someone to compare with. Saving too early says what's missing, in the page's own words, one thing at a time.
 await page.click('#add');
+const fieldWidths = await page.$$eval('#e-name, #e-year, #e-state', els => els.map(e => Math.round(e.getBoundingClientRect().width)));
+assert.ok(fieldWidths.every(w => w === fieldWidths[2]), 'the dialog\'s fields should all be full width: ' + fieldWidths);
 await page.click('#e-save');
 assert.equal(await page.textContent('#e-err'), 'Give this person a name or a label, like "Grandpa".');
 await page.fill('#e-name', 'Mom');
