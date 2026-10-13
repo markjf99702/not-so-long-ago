@@ -346,7 +346,7 @@ dialog .row .right{display:flex;gap:10px;margin-left:auto}
     <div class="field"><label for="e-name">Name</label><input id="e-name" type="text" maxlength="24" placeholder="Grandma, Jordan, Me…" required></div>
     <div class="field"><label for="e-year">Born in</label><input id="e-year" type="number" inputmode="numeric" min="1900" max="2026" required></div>
     <div class="field"><label for="e-state">Grew up in</label><select id="e-state"></select></div>
-    <div class="err" id="e-err"></div>
+    <div class="err" id="e-err" role="alert"></div>
     <div class="row">
       <button class="btn danger" type="button" id="e-remove">Remove</button>
       <div class="right">
@@ -1174,8 +1174,8 @@ $('#edit-form').addEventListener('submit', e => {
   e.preventDefault();
   const name = $('#e-name').value.trim().slice(0, 24);
   const year = parseInt($('#e-year').value, 10);
-  if (!name) { $('#e-err').textContent = 'Give this person a name or a label, like "Grandpa".'; return; }
-  if (!(year >= 1900 && year <= THIS_YEAR)) { $('#e-err').textContent = 'Enter a birth year between 1900 and ' + THIS_YEAR + '.'; return; }
+  if (!name) { $('#e-err').textContent = 'Give this person a name or a label, like "Grandpa".'; $('#e-name').focus(); return; }
+  if (!(year >= 1900 && year <= THIS_YEAR)) { $('#e-err').textContent = 'Enter a birth year between 1900 and ' + THIS_YEAR + '.'; $('#e-year').focus(); return; }
   const st = $('#e-state').value;
   if (isExample && !editing) people = [];      // adding someone new replaces the examples; editing one keeps them
   if (editing && people.includes(editing)) Object.assign(editing, { name, year, st });

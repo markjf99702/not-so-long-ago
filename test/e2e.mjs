@@ -91,13 +91,18 @@ await page.click('#add');
 assert.equal(await page.getByRole('dialog', { name: /add a person/i }).count(), 1, 'a screen reader should hear the dialog\'s name');
 const fieldWidths = await page.$$eval('#e-name, #e-year, #e-state', els => els.map(e => Math.round(e.getBoundingClientRect().width)));
 assert.ok(fieldWidths.every(w => w === fieldWidths[2]), 'the dialog\'s fields should all be full width: ' + fieldWidths);
+await page.waitForFunction(() => document.activeElement?.id === 'e-name');   // the dialog opens on the name box
 await page.click('#e-save');
 assert.equal(await page.textContent('#e-err'), 'Give this person a name or a label, like "Grandpa".');
+// As with the browser's own checks, Save goes back to the box that needs fixing, and a screen reader reads the message out.
+assert.equal(await page.evaluate(() => document.activeElement.id), 'e-name', 'Save should go back to the name box');
+assert.equal(await page.getByRole('alert').count(), 1, 'a screen reader should hear the message');
 await page.fill('#e-name', 'Mom');
 assert.equal(await page.textContent('#e-err'), '', 'the name message stays after the name is in');
 await page.fill('#e-year', '1850');
 await page.click('#e-save');
 assert.match(await page.textContent('#e-err'), /^Enter a birth year between 1900 and \d{4}\.$/);
+assert.equal(await page.evaluate(() => document.activeElement.id), 'e-year', 'Save should go to the year box');
 await page.fill('#e-year', '1958');
 await page.selectOption('#e-state', 'NY');
 await page.click('#e-save');
