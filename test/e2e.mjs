@@ -98,6 +98,31 @@ await page.reload();
 assert.ok(await page.title(), 'the page did not load offline');
 await ctx.setOffline(false);
 
+// The checks below each start from a fresh phone page with nothing saved.
+async function freshPage(hash = '', options = {}) {
+  const c = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, hasTouch: true, serviceWorkers: 'block', ...options });
+  const p = await c.newPage();
+  p.on('pageerror', e => problems.push(e.message));
+  p.on('console', m => { if (m.type() === 'error') problems.push(m.text()); });
+  await p.goto(base + hash);
+  return p;
+}
+const chipsOf = p => p.$$eval('#people .chip[data-id]', els => els.map(e => e.textContent.trim()));
+
+// A hand-edited link or saved list can't break the page: a state code that isn't a state is dropped
+// (the person stays), and so is anyone whose birth year isn't a whole year.
+{
+  const p = await freshPage('#p=Bob,1990,constructor;Ann,1990.5,TX;Cy,1960,__proto__');
+  assert.deepEqual(await chipsOf(p), ['Cy 1960', 'Bob 1990']);
+  assert.equal(await p.textContent('.ro-year'), '1990');
+  assert.ok(await p.$$eval('#ages-table tbody tr', els => els.length) > 0, 'the ages table is empty');
+  await p.evaluate(() => localStorage.setItem('not-so-long-ago.people.v1', JSON.stringify([{ name: 'Dad', year: 1950, st: 'toString' }, { name: 'Kid', year: 1990.5, st: 'TX' }])));
+  await p.goto('about:blank');
+  await p.goto(base);
+  assert.deepEqual(await chipsOf(p), ['Dad 1950']);
+  await p.context().close();
+}
+
 assert.deepEqual(problems.filter(p => !p.startsWith('failed:')), [], 'problems while using it');
 await browser.close();
 server.close();

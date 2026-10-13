@@ -625,6 +625,7 @@ $('#data-states').textContent.split('\n').map(l => l.trim()).filter(l => l && l[
     note: note || ''
   };
 });
+const isState = st => Object.prototype.hasOwnProperty.call(STATES, st);   // not "constructor" or "toString"
 const FIFTY = Object.values(STATES).filter(s => s.code !== 'DC');
 const crimeStates = t => FIFTY.filter(s => s.decrim.t > t).length;
 const marryStates = t => FIFTY.filter(s => s.marry.t <= t).length;
@@ -719,15 +720,15 @@ function load(){
   const h = location.hash.match(/(?:^#|&)p=([^&]+)/);
   if (h) {
     try {
-      const list = h[1].split(';').map(x => x.split(',').map(decodeURIComponent)).map(([name, y, st]) => ({ name: name.slice(0, 24), year: +y, st: STATES[st] ? st : '' }))
-        .filter(p => p.name && p.year >= 1900 && p.year <= THIS_YEAR).slice(0, MAX_PEOPLE);
+      const list = h[1].split(';').map(x => x.split(',').map(decodeURIComponent)).map(([name, y, st]) => ({ name: name.slice(0, 24), year: +y, st: isState(st) ? st : '' }))
+        .filter(p => p.name && Number.isInteger(p.year) && p.year >= 1900 && p.year <= THIS_YEAR).slice(0, MAX_PEOPLE);
       if (list.length) { people = list.map(p => Object.assign({ id: uid++ }, p)); fromLink = true; sortPeople(); return; }
     } catch (e) { /* fall through */ }
   }
   try {
     const saved = JSON.parse(localStorage.getItem(STORE) || 'null');
     if (Array.isArray(saved) && saved.length) {
-      people = saved.filter(p => p && p.name && p.year >= 1900 && p.year <= THIS_YEAR).slice(0, MAX_PEOPLE).map(p => ({ id: uid++, name: String(p.name).slice(0, 24), year: +p.year, st: STATES[p.st] ? p.st : '' }));
+      people = saved.filter(p => p && p.name && Number.isInteger(+p.year) && p.year >= 1900 && p.year <= THIS_YEAR).slice(0, MAX_PEOPLE).map(p => ({ id: uid++, name: String(p.name).slice(0, 24), year: +p.year, st: isState(p.st) ? p.st : '' }));
       if (people.length) { sortPeople(); return; }
     }
   } catch (e) { /* storage blocked or bad data */ }
