@@ -160,6 +160,17 @@ const chipsOf = p => p.$$eval('#people .chip[data-id]', els => els.map(e => e.te
   await p.context().close();
 }
 
+// On a phone, a long name on a late lifeline stays inside the chart instead of running off the edge.
+{
+  const p = await freshPage('#p=Granddaughter%20Emma,2000,CA;Aunt%20Maria-Guadalupe%20Jr.,1990,DC;Grandson%20Alexander,1997,TX');
+  await p.evaluate(() => document.fonts.ready);
+  await p.evaluate(() => new Promise(r => requestAnimationFrame(() => r())));
+  const overflow = await p.$$eval('#svg .c-name', (els, right) => els.filter(e => e.getBoundingClientRect().right > right + 0.5).map(e => e.textContent),
+    await p.$eval('#svg', el => el.getBoundingClientRect().right));
+  assert.deepEqual(overflow, [], 'names running off the chart');
+  await p.context().close();
+}
+
 assert.deepEqual(problems.filter(p => !p.startsWith('failed:')), [], 'problems while using it');
 await browser.close();
 server.close();

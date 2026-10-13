@@ -811,8 +811,9 @@ function renderChart(){
     if (wide) {
       out.push('<text class="c-name" x="0" y="' + (cy + 5) + '">' + esc(p.name) + '<tspan class="c-name-sub" dx="8">' + p.year + (p.st ? ' · ' + p.st : '') + '</tspan></text>');
     } else {
+      // A late lifeline ends its name at "now". So does a long name that would run off the edge (checked once it's drawn, below).
       const anchorEnd = bx > x1 - 110;
-      out.push('<text class="c-name" x="' + (anchorEnd ? ex : bx) + '" y="' + (y + 13) + '"' + (anchorEnd ? ' text-anchor="end"' : '') + '>' + esc(p.name) + '<tspan class="c-name-sub" dx="6">' + p.year + (p.st ? ' · ' + p.st : '') + '</tspan></text>');
+      out.push('<text class="c-name" x="' + (anchorEnd ? ex : bx) + '" y="' + (y + 13) + '"' + (anchorEnd ? ' text-anchor="end"' : ' data-end="' + ex + '"') + '>' + esc(p.name) + '<tspan class="c-name-sub" dx="6">' + p.year + (p.st ? ' · ' + p.st : '') + '</tspan></text>');
     }
     out.push('<rect x="' + bx.toFixed(1) + '" y="' + (cy - lifeH / 2) + '" width="' + Math.max(2, ex - bx).toFixed(1) + '" height="' + lifeH + '" rx="2" style="fill:' + col + '"></rect>');
     for (let a = 10; p.year + a < t1; a += 10) {
@@ -873,6 +874,10 @@ function renderChart(){
 
   chartGeom = { X, t0, t1, x0, x1, W, H, axisY };
   box.innerHTML = '<svg id="svg" viewBox="0 -2 ' + W + ' ' + (H + 16) + '" width="' + W + '" height="' + (H + 16) + '" role="img" aria-label="Lifelines of the people on this page, above bars showing when anti-LGBTQ+ rules were in effect in the US">' + defs + grid + out.join('') + markers.join('') + nowTxt + '<g id="cursor"></g></svg>';
+  box.querySelectorAll('.c-name[data-end]').forEach(el => {
+    const b = el.getBBox();
+    if (b.x + b.width > W) { el.setAttribute('x', el.dataset.end); el.setAttribute('text-anchor', 'end'); }
+  });
   drawCursor();
 }
 
@@ -1249,6 +1254,7 @@ renderFilters();
 renderAbout();
 bindChart();
 renderAll(true);
+if (document.fonts) document.fonts.ready.then(() => renderChart());   // the names were measured in the fallback font
 let rz = null, lastW = $('#chart').clientWidth;
 if (!framed && 'serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 new ResizeObserver(() => {
