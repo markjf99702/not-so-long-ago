@@ -627,6 +627,7 @@ $('#data-states').textContent.split('\n').map(l => l.trim()).filter(l => l && l[
   };
 });
 const isState = st => Object.prototype.hasOwnProperty.call(STATES, st);   // not "constructor" or "toString"
+const inName = S => S.code === 'DC' ? 'the ' + S.name : S.name;           // in a sentence: "in the District of Columbia"
 const FIFTY = Object.values(STATES).filter(s => s.code !== 'DC');
 const crimeStates = t => FIFTY.filter(s => s.decrim.t > t).length;
 const marryStates = t => FIFTY.filter(s => s.marry.t <= t).length;
@@ -1019,10 +1020,10 @@ function allEvents(){
     const S = STATES[st];
     if (S.decrimHow === 'lawrence') {
       const law = list.find(e => e.date.s === '2003-06-26' && !e.st);
-      if (law) (law.notes = law.notes || []).push({ ps, txt: 'This ended the law in ' + S.name + ', where ' + namesOf(ps) + ' grew up.' + (S.note ? ' ' + S.note : '') });
+      if (law) (law.notes = law.notes || []).push({ ps, txt: 'This ended the law in ' + inName(S) + ', where ' + namesOf(ps) + ' grew up.' + (S.note ? ' ' + S.note : '') });
     } else {
       list.push({ date: S.decrim, cat: 'rights', tone: '+', st, title: S.decrimHow === 'court' ? 'A court strikes down the sodomy law' : 'The sodomy law is repealed',
-        blurb: (S.decrimHow === 'court' ? 'A ruling means sex between consenting adults of the same sex can no longer be prosecuted in ' + S.name + '.' : S.name + '’s legislature takes sex between consenting adults of the same sex out of its criminal law.') + (S.note ? ' ' + S.note : ''),
+        blurb: (S.decrimHow === 'court' ? 'A ruling means sex between consenting adults of the same sex can no longer be prosecuted in ' + inName(S) + '.' : cap(inName(S)) + '’s legislature takes sex between consenting adults of the same sex out of its criminal law.') + (S.note ? ' ' + S.note : ''),
         notes: [{ ps, txt: '' }] });
     }
     S.windows.forEach(w => {
@@ -1030,15 +1031,15 @@ function allEvents(){
     });
     if (S.unions && S.unions.date.t < S.marry.t) {
       list.push({ date: S.unions.date, cat: 'rights', tone: '+', st, title: cap(S.unions.kind),
-        blurb: S.name + ' gives same-sex couples ' + S.unions.kind + ', a legal status short of marriage.', notes: [{ ps, txt: '' }] });
+        blurb: cap(inName(S)) + ' gives same-sex couples ' + S.unions.kind + ', a legal status short of marriage.', notes: [{ ps, txt: '' }] });
     }
     if (S.marryHow === 'obergefell') {
       const ob = list.find(e => e.date.s === '2015-06-26' && !e.st);
-      if (ob) (ob.notes = ob.notes || []).push({ ps, txt: 'This brought marriage to ' + S.name + ', where ' + namesOf(ps) + ' grew up.' });
+      if (ob) (ob.notes = ob.notes || []).push({ ps, txt: 'This brought marriage to ' + inName(S) + ', where ' + namesOf(ps) + ' grew up.' });
     } else {
       const how = { court: 'A state court ruling', legislature: 'A law passed by the legislature', ballot: 'A vote of the people', 'federal-court': 'A federal court ruling' }[S.marryHow] || 'A change in the law';
       list.push({ date: S.marry, cat: 'rights', tone: '+', st, title: 'Same-sex couples can marry',
-        blurb: how + ' opens marriage to same-sex couples in ' + S.name + '.', notes: [{ ps, txt: '' }] });
+        blurb: how + ' opens marriage to same-sex couples in ' + inName(S) + '.', notes: [{ ps, txt: '' }] });
     }
   });
   list.sort((a, b) => a.date.t - b.date.t);
@@ -1058,7 +1059,7 @@ function sentence(p, when, what){
 function renderAges(){
   const hl = people.map(p => {
     const S = p.st ? STATES[p.st] : null;
-    const crime = S ? { d: S.decrim, w: 'gay sex stopped being a crime in ' + S.name } : { d: LAWRENCE, w: 'the Supreme Court struck down the last sodomy laws' };
+    const crime = S ? { d: S.decrim, w: 'gay sex stopped being a crime in ' + inName(S) } : { d: LAWRENCE, w: 'the Supreme Court struck down the last sodomy laws' };
     const mar = S ? { d: S.marry, w: 'same-sex couples could marry there' } : { d: OBERGEFELL, w: 'same-sex couples could marry in every state' };
     const a1 = ageAt(p, crime.d.t), a2 = ageAt(p, mar.d.t);
     const txt = a1 > 0 && a2 > 0
@@ -1077,7 +1078,7 @@ function renderAges(){
         const d = m.state === 'decrim' ? S.decrim : S.marry;
         const how = m.state === 'decrim' ? S.decrimHow : S.marryHow;
         if (how === 'lawrence' || how === 'obergefell') return; // same day as the national row
-        rows.push({ date: d, t: m.state === 'decrim' ? 'Gay sex legal in ' + S.name : 'Marriage in ' + S.name, sub: 'Where ' + namesOf(ps) + ' grew up', mark: ps });
+        rows.push({ date: d, t: m.state === 'decrim' ? 'Gay sex legal in ' + inName(S) : 'Marriage in ' + inName(S), sub: 'Where ' + namesOf(ps) + ' grew up', mark: ps });
       });
     } else rows.push({ date: parseDate(m.d), t: m.t, sub: m.sub });
   });

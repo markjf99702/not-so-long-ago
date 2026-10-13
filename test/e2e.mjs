@@ -229,6 +229,20 @@ for (const [scheme, theme] of [['light', ''], ['dark', ''], ['light', 'dark']]) 
   await p.context().close();
 }
 
+// In a sentence, the District of Columbia takes "the".
+{
+  const p = await freshPage('#p=Ann,1960,DC');
+  assert.equal((await p.textContent('#headlines')).trim(),
+    'Ann was 33 when gay sex stopped being a crime in the District of Columbia, and 50 when same-sex couples could marry there.');
+  const rows = await p.$$eval('#ages-table tbody th', els => els.map(e => e.firstChild.textContent));
+  assert.ok(rows.includes('Gay sex legal in the District of Columbia') && rows.includes('Marriage in the District of Columbia'), 'table rows: ' + rows);
+  const blurbs = await p.$$eval('#years .ev.state p', els => els.map(e => e.textContent));
+  for (const words of ['The District of Columbia’s legislature takes sex', 'The District of Columbia gives same-sex couples domestic partnerships', 'opens marriage to same-sex couples in the District of Columbia.']) {
+    assert.ok(blurbs.some(b => b.includes(words)), 'no event says: ' + words);
+  }
+  await p.context().close();
+}
+
 assert.deepEqual(problems.filter(p => !p.startsWith('failed:')), [], 'problems while using it');
 await browser.close();
 server.close();
