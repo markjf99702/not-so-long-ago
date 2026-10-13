@@ -74,9 +74,15 @@ assert.deepEqual(await plainYear.evaluate(el => [getComputedStyle(el).cursor, ge
 await page.click('#years button.y[data-year="1969"]');
 assert.equal(await page.textContent('.ro-year'), '1969');
 
-// Add someone to compare with.
+// Add someone to compare with. Saving too early says what's missing, in the page's own words, one thing at a time.
 await page.click('#add');
+await page.click('#e-save');
+assert.equal(await page.textContent('#e-err'), 'Give this person a name or a label, like "Grandpa".');
 await page.fill('#e-name', 'Mom');
+assert.equal(await page.textContent('#e-err'), '', 'the name message stays after the name is in');
+await page.fill('#e-year', '1850');
+await page.click('#e-save');
+assert.match(await page.textContent('#e-err'), /^Enter a birth year between 1900 and \d{4}\.$/);
 await page.fill('#e-year', '1958');
 await page.selectOption('#e-state', 'NY');
 await page.click('#e-save');
