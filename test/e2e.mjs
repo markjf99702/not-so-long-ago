@@ -194,6 +194,26 @@ async function chipsSoon(p, expected) {
   await p.context().close();
 }
 
+// The dialog's red text (its error line and Remove) is readable on the dialog in both palettes,
+// including a dark theme set on the page (as the Artifact viewer does) rather than by the system.
+for (const [scheme, theme] of [['light', ''], ['dark', ''], ['light', 'dark']]) {
+  const p = await freshPage('', { colorScheme: scheme });
+  if (theme) await p.evaluate(t => { document.documentElement.dataset.theme = t; }, theme);
+  const ratios = await p.evaluate(() => {
+    const lum = c => {
+      const v = c.match(/[\d.]+/g).slice(0, 3).map(n => { n /= 255; return n <= 0.03928 ? n / 12.92 : ((n + 0.055) / 1.055) ** 2.4; });
+      return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2];
+    };
+    const bg = lum(getComputedStyle(document.querySelector('#edit')).backgroundColor);
+    return ['#e-err', '#e-remove'].map(s => {
+      const fg = lum(getComputedStyle(document.querySelector(s)).color);
+      return +((Math.max(fg, bg) + 0.05) / (Math.min(fg, bg) + 0.05)).toFixed(2);
+    });
+  });
+  assert.ok(ratios.every(r => r >= 4.5), `red text on the dialog (${scheme}${theme ? ', data-theme=' + theme : ''}): ${ratios}`);
+  await p.context().close();
+}
+
 assert.deepEqual(problems.filter(p => !p.startsWith('failed:')), [], 'problems while using it');
 await browser.close();
 server.close();
