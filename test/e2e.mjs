@@ -249,6 +249,21 @@ for (const [scheme, theme] of [['light', ''], ['dark', ''], ['light', 'dark']]) 
   await p.context().close();
 }
 
+// On paper: no footer and no buttons, and the colour keys that say who is who still print.
+{
+  const p = await freshPage();
+  await p.emulateMedia({ media: 'print' });
+  const printed = await p.evaluate(() => {
+    const cs = s => getComputedStyle(document.querySelector(s));
+    return {
+      footer: cs('.jd-foot').display, buttons: cs('#share-row').display + ' ' + getComputedStyle(document.querySelector('#reset').parentNode).display,
+      starterForm: cs('#starter-form').display, keys: ['.chip .sw', '.age .dot', '.headlines .sw', '.legend i'].map(s => cs(s).printColorAdjust).join(' '),
+    };
+  });
+  assert.deepEqual(printed, { footer: 'none', buttons: 'none none', starterForm: 'none', keys: 'exact exact exact exact' });
+  await p.context().close();
+}
+
 assert.deepEqual(problems.filter(p => !p.startsWith('failed:')), [], 'problems while using it');
 await browser.close();
 server.close();

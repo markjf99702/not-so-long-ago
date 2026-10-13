@@ -245,6 +245,10 @@ dialog .row .right{display:flex;gap:10px;margin-left:auto}
 @media (prefers-reduced-motion:no-preference){
   .readout{transition:background .2s}
 }
+@media print{
+  .jd-foot,.share-row,.starter form{display:none}
+  .sw,.dot,.legend i{-webkit-print-color-adjust:exact;print-color-adjust:exact}   /* who is who, even without backgrounds */
+}
 </style>
 </head>
 <body>
