@@ -82,6 +82,17 @@ assert.match(rules, /Gay sex was a crime in \d+ of 50 states/);
 assert.match(rules, /Texas \(you\): a crime until 2003/);
 assert.match(rules, /Mom 36/);
 
+// The narrower diagnosis that replaced homosexuality in the manual had another name until DSM-III in 1980.
+const asYearBegan = async y => {
+  await page.$eval('#year', (el, y) => { el.value = y; el.dispatchEvent(new Event('input', { bubbles: true })); }, y);
+  return page.textContent('#readout');
+};
+assert.match(await asYearBegan(1975), /"sexual orientation disturbance," was still in the psychiatric manual/);
+assert.match(await asYearBegan(1980), /"sexual orientation disturbance," was still/);
+assert.match(await asYearBegan(1981), /"ego-dystonic homosexuality," was still in the psychiatric manual/);
+assert.match(await asYearBegan(1987), /"ego-dystonic homosexuality," was still/);
+assert.doesNotMatch(await asYearBegan(1988), /psychiatric manual/);
+
 // Filter the list to one kind of event.
 await page.click('.fchip[data-cat="trans"]');
 const kinds = await page.$$eval('#years .ev-meta', els => [...new Set(els.map(e => e.textContent.split(' · ').pop()))]);
