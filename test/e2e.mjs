@@ -149,6 +149,17 @@ const chipsOf = p => p.$$eval('#people .chip[data-id]', els => els.map(e => e.te
   await p.context().close();
 }
 
+// When the clipboard says no, the link is shown instead, and it wraps rather than pushing the page sideways.
+{
+  const family = [['Grandma Rose', 1931, 'GA'], ['Grandpa Joe', 1929, 'GA'], ['Aunt Maria', 1960, 'FL'], ['Sam', 2001, 'CA']];
+  const p = await freshPage('#p=' + family.map(a => a.map(encodeURIComponent).join(',')).join(';'));
+  await p.evaluate(() => { navigator.clipboard.writeText = () => Promise.reject(new Error('refused')); });
+  await p.click('#share');
+  await p.waitForFunction(() => document.querySelector('#share-msg').textContent.startsWith('http'));
+  assert.ok(await p.evaluate(() => document.documentElement.scrollWidth) <= 390, 'the link pushes the page sideways');
+  await p.context().close();
+}
+
 assert.deepEqual(problems.filter(p => !p.startsWith('failed:')), [], 'problems while using it');
 await browser.close();
 server.close();
