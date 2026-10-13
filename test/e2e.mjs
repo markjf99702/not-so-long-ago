@@ -63,6 +63,17 @@ assert.equal((await page.textContent('#headlines')).trim(),
   'You were 18 when gay sex stopped being a crime in Texas, and 30 when same-sex couples could marry there.');
 assert.match(await page.textContent('#years details.before summary'), /^Before you were born\d+ events, 1924–1984$/);
 
+// In that group, a year the chart can show jumps the lifelines there; one from before the chart starts (1950 here) is plain text.
+await page.click('#years details.before summary');
+const beforeYears = await page.$$eval('#years details.before .yr-h .y', els => els.map(e => e.tagName.toLowerCase() + ' ' + e.textContent));
+assert.ok(beforeYears.includes('span 1924') && beforeYears.includes('button 1950'), 'years in the Before group: ' + beforeYears);
+const plainYear = page.locator('#years .yr-h span.y').first();
+const plainColor = await plainYear.evaluate(el => getComputedStyle(el).color);
+await plainYear.hover();
+assert.deepEqual(await plainYear.evaluate(el => [getComputedStyle(el).cursor, getComputedStyle(el).color]), ['auto', plainColor], 'a plain year should not look clickable');
+await page.click('#years button.y[data-year="1969"]');
+assert.equal(await page.textContent('.ro-year'), '1969');
+
 // Add someone to compare with.
 await page.click('#add');
 await page.fill('#e-name', 'Mom');
