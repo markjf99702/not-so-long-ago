@@ -50,6 +50,9 @@ assert.deepEqual(await chips(), ['Nana 1944 · TX', 'Mom 1970 · OH', 'Sam 2001 
 assert.equal(await page.textContent('.ro-year'), '2001');
 assert.ok(await page.isVisible('#starter'), 'the examples should say they are examples');
 
+// The bars are dark in the light palette and pale in the dark one, so the heading doesn't call them dark.
+assert.equal(await page.textContent('#lifelines .sec-h p'), 'Each bar is a rule that held in the US. Where it thins, states were changing it one by one.');
+
 // The six lifeline colours are Baker's six-stripe flag; his 1978 original had eight.
 assert.match(await page.textContent('#about'), /Each lifeline takes a stripe of Gilbert Baker's rainbow flag/);
 
