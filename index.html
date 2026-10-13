@@ -1116,7 +1116,7 @@ function renderYears(){
   const during = list.filter(e => e.date.y >= oldest.year);
   let h = '';
   if (before.length) {
-    h += '<details class="before"><summary>Before ' + esc(oldest.name) + ' was born<small>' + plural(before.length, 'event') + ', ' + before[0].date.y + '–' + before[before.length - 1].date.y + '</small></summary>' + groupHTML(before, false) + '</details>';
+    h += '<details class="before"><summary>Before ' + esc(subj(oldest).born) + '<small>' + plural(before.length, 'event') + ', ' + before[0].date.y + '–' + before[before.length - 1].date.y + '</small></summary>' + groupHTML(before, false) + '</details>';
   }
   h += groupHTML(during, true);
   if (!list.length) h = '<p class="none">No events match. Turn on a category above.</p>';

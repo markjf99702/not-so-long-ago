@@ -58,6 +58,7 @@ assert.deepEqual(await chips(), ['You 1985 · TX']);
 assert.equal(await page.textContent('.ro-cap'), 'The year you were born');
 assert.equal((await page.textContent('#headlines')).trim(),
   'You were 18 when gay sex stopped being a crime in Texas, and 30 when same-sex couples could marry there.');
+assert.match(await page.textContent('#years details.before summary'), /^Before you were born\d+ events, 1924–1984$/);
 
 // Add someone to compare with.
 await page.click('#add');
