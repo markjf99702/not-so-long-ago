@@ -171,6 +171,29 @@ const chipsOf = p => p.$$eval('#people .chip[data-id]', els => els.map(e => e.te
   await p.context().close();
 }
 
+// Opening another share link in the same tab shows its people straight away, and Back goes back.
+async function chipsSoon(p, expected) {
+  for (let i = 0; i < 30 && JSON.stringify(await chipsOf(p)) !== JSON.stringify(expected); i++) await p.waitForTimeout(100);
+  assert.deepEqual(await chipsOf(p), expected);
+}
+{
+  const p = await freshPage();
+  await p.goto(base + '#p=Nana,1944,TX');
+  await chipsSoon(p, ['Nana 1944 · TX']);
+  assert.equal(await p.isVisible('#starter'), false, 'a link\'s people are not the examples');
+  await p.goto(base + '#p=Grandpa,1930,GA;Kid,2010,OR');
+  await chipsSoon(p, ['Grandpa 1930 · GA', 'Kid 2010 · OR']);
+  await p.goBack();
+  await chipsSoon(p, ['Nana 1944 · TX']);
+  // Adding someone keeps the link's people, as it does when the link is opened fresh.
+  await p.click('#add');
+  await p.fill('#e-name', 'Ann');
+  await p.fill('#e-year', '1980');
+  await p.click('#e-save');
+  assert.deepEqual(await chipsOf(p), ['Nana 1944 · TX', 'Ann 1980']);
+  await p.context().close();
+}
+
 assert.deepEqual(problems.filter(p => !p.startsWith('failed:')), [], 'problems while using it');
 await browser.close();
 server.close();

@@ -718,6 +718,7 @@ function subj(p){
 const ageAt = (p, t) => Math.floor(t) - p.year;
 
 function load(){
+  isExample = false; fromLink = false;
   const h = location.hash.match(/(?:^#|&)p=([^&]+)/);
   if (h) {
     try {
@@ -1255,6 +1256,8 @@ renderAbout();
 bindChart();
 renderAll(true);
 if (document.fonts) document.fonts.ready.then(() => renderChart());   // the names were measured in the fallback font
+// Another share link opened in this tab, or Back to one: show its people. (Saving and starting over use replaceState, which doesn't fire this.)
+window.addEventListener('hashchange', () => { closeEdit(); load(); renderAll(true); });
 let rz = null, lastW = $('#chart').clientWidth;
 if (!framed && 'serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 new ResizeObserver(() => {
