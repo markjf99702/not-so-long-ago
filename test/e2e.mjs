@@ -49,6 +49,10 @@ const chips = () => page.$$eval('#people .chip[data-id]', els => els.map(e => e.
 assert.deepEqual(await chips(), ['Nana 1944 · TX', 'Mom 1970 · OH', 'Sam 2001 · CA']);
 assert.equal(await page.textContent('.ro-year'), '2001');
 assert.ok(await page.isVisible('#starter'), 'the examples should say they are examples');
+const starterHeights = await page.$$eval('#s-year, #s-state, #starter-form .btn', els => els.map(e => Math.round(e.getBoundingClientRect().height)));
+assert.ok(starterHeights.every(h => h === starterHeights[0]), 'the starter\'s box, menu and button should be one height: ' + starterHeights);
+const starterLabels = await page.$$eval('#starter-form label', els => els.map(e => Math.round(e.getBoundingClientRect().top)));
+assert.equal(starterLabels[0], starterLabels[1], 'the starter\'s labels should line up');
 
 // The bars are dark in the light palette and pale in the dark one, so the heading doesn't call them dark.
 assert.equal(await page.textContent('#lifelines .sec-h p'), 'Each bar is a rule that held in the US. Where it thins, states were changing it one by one.');
