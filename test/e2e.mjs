@@ -47,6 +47,7 @@ for (const f of ['900 40px "Big Shoulders Display"', '600 16px "Big Shoulders Te
 // It opens on the example family, with the year cursor on the youngest one's birth year.
 const chips = () => page.$$eval('#people .chip[data-id]', els => els.map(e => e.textContent.trim()));
 assert.deepEqual(await chips(), ['Nana 1944 · TX', 'Mom 1970 · OH', 'Sam 2001 · CA']);
+assert.equal(await page.getByRole('group', { name: 'People on the lifelines' }).count(), 1, 'the chips should be a named group');
 assert.equal(await page.textContent('.ro-year'), '2001');
 assert.ok(await page.isVisible('#starter'), 'the examples should say they are examples');
 const starterHeights = await page.$$eval('#s-year, #s-state, #starter-form .btn', els => els.map(e => Math.round(e.getBoundingClientRect().height)));
@@ -87,6 +88,7 @@ await page.click('.fchip[data-cat="*"]');
 
 // Add someone to compare with. Saving too early says what's missing, in the page's own words, one thing at a time.
 await page.click('#add');
+assert.equal(await page.getByRole('dialog', { name: /add a person/i }).count(), 1, 'a screen reader should hear the dialog\'s name');
 const fieldWidths = await page.$$eval('#e-name, #e-year, #e-state', els => els.map(e => Math.round(e.getBoundingClientRect().width)));
 assert.ok(fieldWidths.every(w => w === fieldWidths[2]), 'the dialog\'s fields should all be full width: ' + fieldWidths);
 await page.click('#e-save');

@@ -256,7 +256,7 @@ dialog .row .right{display:flex;gap:10px;margin-left:auto}
   <p>Put LGBTQ+ history on your own life, and on the lives of the people you love. Drag across the years to see what was still a crime, what was still banned, and how old each of you was when it changed.</p>
 </header>
 
-<div class="people" id="people" aria-label="People on the lifelines"></div>
+<div class="people" id="people" role="group" aria-label="People on the lifelines"></div>
 
 <div class="starter" id="starter" hidden>
   <p><strong>These are example lifelines.</strong> Put yourself on instead, then add the people you want to compare with: a parent, a grandparent, a partner, a kid.</p>
@@ -336,7 +336,7 @@ dialog .row .right{display:flex;gap:10px;margin-left:auto}
 
 </div>
 
-<dialog id="edit">
+<dialog id="edit" aria-labelledby="edit-h">
   <form id="edit-form" method="dialog" autocomplete="off" novalidate>
     <h2 id="edit-h">Add a person</h2>
     <div class="field"><label for="e-name">Name</label><input id="e-name" type="text" maxlength="24" placeholder="Grandma, Jordan, Me…" required></div>
