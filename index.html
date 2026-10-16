@@ -870,11 +870,20 @@ function renderChart(){
         const h = Math.max(2, barH * n / 50);
         out.push('<rect class="c-bar" x="' + X(a).toFixed(2) + '" y="' + (cy - h / 2).toFixed(2) + '" width="' + Math.max(0.6, X(b) - X(a) + 0.3).toFixed(2) + '" height="' + h.toFixed(2) + '"></rect>');
       }
+      // A dot that lands on one already on this lane (two people's states changed on the same day) moves 4px up, the next one down, and so on.
+      // The ones moved furthest are drawn first, so each peeks out from behind the one nearer the bar and none is hidden.
+      const dots = [];
       people.forEach(p => {
         if (!p.st) return;
         const d = STATES[p.st][field];
-        if (d.t > t0 && d.t < t1) markers.push('<circle class="c-mark" cx="' + X(d.t).toFixed(1) + '" cy="' + cy + '" r="5" style="fill:' + colorOf(p) + '"><title>' + esc(STATES[p.st].name) + ', ' + esc(fmtDate(d)) + '</title></circle>');
+        if (!(d.t > t0 && d.t < t1)) return;
+        const x = X(d.t);
+        const taken = dots.filter(o => Math.abs(o.x - x) < 6).map(o => o.slot);
+        let slot = 0;
+        for (let k = 1; taken.includes(slot); k++) slot = (k % 2 ? -1 : 1) * Math.ceil(k / 2);
+        dots.push({ x, slot, svg: '<circle class="c-mark" cx="' + x.toFixed(1) + '" cy="' + (cy + slot * 4) + '" r="5" style="fill:' + colorOf(p) + '"><title>' + esc(STATES[p.st].name) + ', ' + esc(fmtDate(d)) + '</title></circle>' });
       });
+      dots.sort((a, b) => Math.abs(b.slot) - Math.abs(a.slot)).forEach(o => markers.push(o.svg));
     } else {
       lane.segs.forEach(s => {
         const a = s.from ? s.from.t : t0, b = s.to ? s.to.t : t1;

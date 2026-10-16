@@ -220,6 +220,22 @@ const chipsOf = p => p.$$eval('#people .chip[data-id]', els => els.map(e => e.te
   await p.context().close();
 }
 
+// When two people's states changed on the same day, each keeps a dot on that lane: the second moves 4px up,
+// the third 4px down, and the moved ones are drawn first so they peek out from behind the dot on the bar.
+{
+  const p = await freshPage('#p=Nana,1944,TX;Mom,1970,OH;Kid,1995,TX');
+  const [dots, bars] = await p.evaluate(() => [
+    [...document.querySelectorAll('#svg .c-mark')].map(e => [e.querySelector('title')?.textContent, e.style.fill, +e.getAttribute('cy')]),
+    [...document.querySelectorAll('#svg .c-track')].map(e => +e.getAttribute('y') + 0.5)]);
+  const bar = cy => bars.reduce((a, b) => Math.abs(b - cy) < Math.abs(a - cy) ? b : a);
+  const placed = dots.map(([title, fill, cy]) => [title, fill, cy - bar(cy)]);   // in the order they're drawn
+  assert.deepEqual(placed.filter(d => /2003|1974/.test(d[0])),
+    [['Texas, June 26, 2003', 'var(--p2)', -4], ['Texas, June 26, 2003', 'var(--p0)', 0], ['Ohio, January 1, 1974', 'var(--p1)', 0]]);
+  assert.deepEqual(placed.filter(d => /2015/.test(d[0])),
+    [['Ohio, June 26, 2015', 'var(--p1)', -4], ['Texas, June 26, 2015', 'var(--p2)', 4], ['Texas, June 26, 2015', 'var(--p0)', 0]]);
+  await p.context().close();
+}
+
 // Opening another share link in the same tab shows its people straight away, and Back goes back.
 async function chipsSoon(p, expected) {
   for (let i = 0; i < 30 && JSON.stringify(await chipsOf(p)) !== JSON.stringify(expected); i++) await p.waitForTimeout(100);
