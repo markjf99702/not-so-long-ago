@@ -236,6 +236,32 @@ const chipsOf = p => p.$$eval('#people .chip[data-id]', els => els.map(e => e.te
   await p.context().close();
 }
 
+// The year line runs under the names and lane labels, whose halo in the page colour stops it short of the text,
+// and the year tag stays on top. On a phone a name's halo ends where its lifeline begins, so letters like g and y
+// don't nick the bar under them.
+{
+  const p = await freshPage('#p=Peggy,1950,NY;Jay,1999,WY');
+  const got = await p.evaluate(() => {
+    const svg = document.querySelector('#svg');
+    const line = svg.querySelector('.c-cursor'), tag = svg.querySelector('.c-cursor-pill');
+    const labels = [...svg.querySelectorAll('.c-name, .c-lane')];
+    const after = (a, b) => !!(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
+    const halo = getComputedStyle(labels[0]);
+    const lifelines = [...svg.querySelectorAll('rect[rx="2"]')];
+    return {
+      lineUnderLabels: labels.every(l => after(line, l)),
+      tagOnTop: [...svg.querySelectorAll('text, rect, circle')].every(el => tag.parentNode.contains(el) || after(el, tag)),
+      halo: [halo.stroke === getComputedStyle(document.body).backgroundColor, halo.strokeWidth, halo.paintOrder],
+      haloEndsAtLifeline: [...svg.querySelectorAll('.c-name')].map((n, i) => {
+        const clip = (n.getAttribute('clip-path') || '').slice(4, -1), r = clip && svg.querySelector(clip + ' rect');
+        return !!r && +r.getAttribute('y') + +r.getAttribute('height') === +lifelines[i].getAttribute('y');
+      }),
+    };
+  });
+  assert.deepEqual(got, { lineUnderLabels: true, tagOnTop: true, halo: [true, '4px', 'stroke'], haloEndsAtLifeline: [true, true] });
+  await p.context().close();
+}
+
 // Opening another share link in the same tab shows its people straight away, and Back goes back.
 async function chipsSoon(p, expected) {
   for (let i = 0; i < 30 && JSON.stringify(await chipsOf(p)) !== JSON.stringify(expected); i++) await p.waitForTimeout(100);
@@ -332,7 +358,8 @@ for (const [scheme, theme] of [['light', ''], ['dark', ''], ['light', 'dark']]) 
   await p.context().close();
 }
 
-// On paper: no footer and no buttons, and the colour keys that say who is who still print.
+// On paper: no footer and no buttons, the colour keys that say who is who still print, and the chart labels'
+// halo is the paper's white rather than an outline in the screen's page colour.
 {
   const p = await freshPage();
   await p.emulateMedia({ media: 'print' });
@@ -341,9 +368,10 @@ for (const [scheme, theme] of [['light', ''], ['dark', ''], ['light', 'dark']]) 
     return {
       footer: cs('.jd-foot').display, buttons: cs('#share-row').display + ' ' + getComputedStyle(document.querySelector('#reset').parentNode).display,
       starterForm: cs('#starter-form').display, keys: ['.chip .sw', '.age .dot', '.headlines .sw', '.legend i'].map(s => cs(s).printColorAdjust).join(' '),
+      halo: cs('#svg .c-name').stroke + ' ' + cs('#svg .c-lane').stroke,
     };
   });
-  assert.deepEqual(printed, { footer: 'none', buttons: 'none none', starterForm: 'none', keys: 'exact exact exact exact' });
+  assert.deepEqual(printed, { footer: 'none', buttons: 'none none', starterForm: 'none', keys: 'exact exact exact exact', halo: 'rgb(255, 255, 255) rgb(255, 255, 255)' });
   await p.context().close();
 }
 

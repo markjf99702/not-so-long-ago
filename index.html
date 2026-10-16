@@ -108,6 +108,7 @@ section{padding-block:26px 6px}
 .c-lane-sub{fill:var(--accent);font:600 13px var(--ui);letter-spacing:.02em}
 .c-name{fill:var(--ink);font:700 15px var(--ui)}
 .c-name-sub{fill:var(--muted);font:400 11px var(--mono)}
+.c-name,.c-lane{stroke:var(--paper);stroke-width:4px;paint-order:stroke}   /* a halo, so the year line stops short of the text */
 .c-bar{fill:var(--bar)}
 .c-part{fill:url(#hatch)}
 .c-hatch{fill:var(--bar-part)}
@@ -249,6 +250,7 @@ dialog .row .right{display:flex;gap:10px;margin-left:auto}
 @media print{
   .jd-foot,.share-row,.starter form{display:none}
   .sw,.dot,.legend i{-webkit-print-color-adjust:exact;print-color-adjust:exact}   /* who is who, even without backgrounds */
+  .c-name,.c-lane{stroke:#fff}   /* the labels' halo matches the paper, not the screen */
 }
 </style>
 </head>
@@ -807,7 +809,9 @@ function renderChart(){
   const [t0, t1] = chartRange();
   const X = t => x0 + (Math.max(t0, Math.min(t1, t)) - t0) / (t1 - t0) * (x1 - x0);
   const out = [];
-  const defs = '<defs><pattern id="hatch" patternUnits="userSpaceOnUse" width="5" height="5" patternTransform="rotate(45)"><rect class="c-hatch" width="2.2" height="5"></rect></pattern></defs>';
+  const labels = [];   // names and lane labels, drawn over the year line
+  const clips = [];    // on a phone, each name's halo stops at the top of its lifeline, which used to cover it
+  const hatch = '<pattern id="hatch" patternUnits="userSpaceOnUse" width="5" height="5" patternTransform="rotate(45)"><rect class="c-hatch" width="2.2" height="5"></rect></pattern>';
 
   let y = 0;
   const axisY = 16;
@@ -827,11 +831,12 @@ function renderChart(){
     const bx = X(p.year), ex = X(t1);
     const col = colorOf(p);
     if (wide) {
-      out.push('<text class="c-name" x="0" y="' + (cy + 5) + '">' + esc(p.name) + '<tspan class="c-name-sub" dx="8">' + p.year + (p.st ? ' · ' + p.st : '') + '</tspan></text>');
+      labels.push('<text class="c-name" x="0" y="' + (cy + 5) + '">' + esc(p.name) + '<tspan class="c-name-sub" dx="8">' + p.year + (p.st ? ' · ' + p.st : '') + '</tspan></text>');
     } else {
       // A late lifeline ends its name at "now". So does a long name that would run off the edge (checked once it's drawn, below).
       const anchorEnd = bx > x1 - 110;
-      out.push('<text class="c-name" x="' + (anchorEnd ? ex : bx) + '" y="' + (y + 13) + '"' + (anchorEnd ? ' text-anchor="end"' : ' data-end="' + ex + '"') + '>' + esc(p.name) + '<tspan class="c-name-sub" dx="6">' + p.year + (p.st ? ' · ' + p.st : '') + '</tspan></text>');
+      clips.push('<clipPath id="above-' + i + '"><rect x="-999" y="' + (y - 30) + '" width="' + (W + 1998) + '" height="' + (cy - lifeH / 2 - y + 30) + '"></rect></clipPath>');
+      labels.push('<text class="c-name" clip-path="url(#above-' + i + ')" x="' + (anchorEnd ? ex : bx) + '" y="' + (y + 13) + '"' + (anchorEnd ? ' text-anchor="end"' : ' data-end="' + ex + '"') + '>' + esc(p.name) + '<tspan class="c-name-sub" dx="6">' + p.year + (p.st ? ' · ' + p.st : '') + '</tspan></text>');
     }
     out.push('<rect x="' + bx.toFixed(1) + '" y="' + (cy - lifeH / 2) + '" width="' + Math.max(2, ex - bx).toFixed(1) + '" height="' + lifeH + '" rx="2" style="fill:' + col + '"></rect>');
     for (let a = 10; p.year + a < t1; a += 10) {
@@ -852,9 +857,9 @@ function renderChart(){
     const ongoing = lane.segs && lane.segs.some(s => !s.to);
     const lx = wide ? 0 : x0, ly = wide ? cy + 5 : y + 13;
     if (wide && ongoing) {
-      out.push('<text class="c-lane" x="0" y="' + (cy - 1) + '">' + esc(lane.label) + '</text><text class="c-lane-sub" x="0" y="' + (cy + 12) + '">in effect today</text>');
+      labels.push('<text class="c-lane" x="0" y="' + (cy - 1) + '">' + esc(lane.label) + '</text><text class="c-lane-sub" x="0" y="' + (cy + 12) + '">in effect today</text>');
     } else {
-      out.push('<text class="c-lane" x="' + lx + '" y="' + ly + '">' + esc(lane.label) + (ongoing ? '<tspan class="c-lane-sub" dx="8">in effect today</tspan>' : '') + '</text>');
+      labels.push('<text class="c-lane" x="' + lx + '" y="' + ly + '">' + esc(lane.label) + (ongoing ? '<tspan class="c-lane-sub" dx="8">in effect today</tspan>' : '') + '</text>');
     }
     out.push('<rect class="c-track" x="' + x0 + '" y="' + (cy - 0.5) + '" width="' + (x1 - x0) + '" height="1"></rect>');
     if (lane.kind) {
@@ -900,7 +905,7 @@ function renderChart(){
   const nowTxt = '<text class="c-now" x="' + x1 + '" y="' + H + '" text-anchor="end" dy="12">now</text>';
 
   chartGeom = { X, t0, t1, x0, x1, W, H, axisY };
-  box.innerHTML = '<svg id="svg" viewBox="0 -2 ' + W + ' ' + (H + 16) + '" width="' + W + '" height="' + (H + 16) + '" role="img" aria-label="Lifelines of the people on this page, above bars showing when anti-LGBTQ+ rules were in effect in the US">' + defs + grid + out.join('') + markers.join('') + nowTxt + '<g id="cursor"></g></svg>';
+  box.innerHTML = '<svg id="svg" viewBox="0 -2 ' + W + ' ' + (H + 16) + '" width="' + W + '" height="' + (H + 16) + '" role="img" aria-label="Lifelines of the people on this page, above bars showing when anti-LGBTQ+ rules were in effect in the US"><defs>' + hatch + clips.join('') + '</defs>' + grid + out.join('') + markers.join('') + '<g id="cursor-line"></g>' + labels.join('') + nowTxt + '<g id="cursor"></g></svg>';
   box.querySelectorAll('.c-name[data-end]').forEach(el => {
     const b = el.getBBox();
     if (b.x + b.width > W) { el.setAttribute('x', el.dataset.end); el.setAttribute('text-anchor', 'end'); }
@@ -910,15 +915,16 @@ function renderChart(){
 
 function drawCursor(){
   if (!chartGeom) return;
-  const g = $('#cursor'); if (!g) return;
+  const g = $('#cursor'), line = $('#cursor-line'); if (!g || !line) return;
   const { X, H, axisY } = chartGeom;
   const x = X(cursor);
   const pillW = 42;
   const px = Math.max(chartGeom.x0 - 4, Math.min(chartGeom.W - pillW, x - pillW / 2));
   // hide any decade label the year tag would cover
   document.querySelectorAll('#svg .c-tick').forEach(t => { t.style.opacity = Math.abs(+t.dataset.x - (px + pillW / 2)) < pillW / 2 + 16 ? 0 : ''; });
-  g.innerHTML = '<line class="c-cursor" x1="' + x.toFixed(1) + '" x2="' + x.toFixed(1) + '" y1="' + (axisY + 6) + '" y2="' + H + '"></line>' +
-    '<rect class="c-cursor-pill" x="' + px.toFixed(1) + '" y="' + (axisY - 13) + '" width="' + pillW + '" height="18" rx="9"></rect>' +
+  // The line runs under the names and lane labels (their halo stops it short of the text); the year tag stays on top.
+  line.innerHTML = '<line class="c-cursor" x1="' + x.toFixed(1) + '" x2="' + x.toFixed(1) + '" y1="' + (axisY + 6) + '" y2="' + H + '"></line>';
+  g.innerHTML = '<rect class="c-cursor-pill" x="' + px.toFixed(1) + '" y="' + (axisY - 13) + '" width="' + pillW + '" height="18" rx="9"></rect>' +
     '<text class="c-cursor-txt" x="' + (px + pillW / 2).toFixed(1) + '" y="' + (axisY) + '" text-anchor="middle">' + cursor + '</text>';
 }
 
