@@ -301,6 +301,7 @@ async function chipsSoon(p, expected) {
   assert.equal(await backToMine.count(), 1, 'Back to mine should be offered');
   await backToMine.click();
   assert.deepEqual(await chipsOf(p), ['Dad 1950 · OH']);
+  assert.equal(await p.evaluate(() => document.activeElement.getAttribute('aria-label')), 'Edit Dad', 'the focus should go to the people, not away with the button');
   assert.equal(await p.evaluate(() => location.hash), '', 'Back to mine should drop the link');
   assert.equal(await saved(), mine);
   assert.equal(await p.locator('.people-note').count(), 0);
