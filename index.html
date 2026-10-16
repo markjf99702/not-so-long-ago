@@ -75,7 +75,8 @@ button,input,select{font:inherit;color:inherit}
 .chip small{font:400 13px/1 var(--mono);color:var(--muted);letter-spacing:0}
 .chip.add{border-style:dashed;color:var(--accent);padding-left:14px}
 .chip.add:disabled{opacity:.45;cursor:default}
-.people-note{flex-basis:100%;font:400 13px/1.4 var(--mono);color:var(--muted)}
+.people-note{flex-basis:100%;font:400 13px/1.4 var(--mono);color:var(--muted);display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.people-note .btn{padding:7px 14px;font-size:15px}
 
 .starter{margin-block:6px 4px;background:var(--panel);border-radius:10px;padding:14px 16px;display:grid;gap:10px}
 .starter p{margin:0;font-size:16px}
@@ -733,14 +734,23 @@ function load(){
       if (list.length) { people = list.map(p => Object.assign({ id: uid++ }, p)); fromLink = true; sortPeople(); return; }
     } catch (e) { /* fall through */ }
   }
+  const saved = savedPeople();
+  if (saved.length) { people = saved.map(p => Object.assign({ id: uid++ }, p)); sortPeople(); return; }
+  useExamples();
+}
+// The people saved on this device, if any.
+function savedPeople(){
   try {
     const saved = JSON.parse(localStorage.getItem(STORE) || 'null');
-    if (Array.isArray(saved) && saved.length) {
-      people = saved.filter(p => p && p.name && Number.isInteger(+p.year) && p.year >= 1900 && p.year <= THIS_YEAR).slice(0, MAX_PEOPLE).map(p => ({ id: uid++, name: String(p.name).slice(0, 24), year: +p.year, st: isState(p.st) ? p.st : '' }));
-      if (people.length) { sortPeople(); return; }
-    }
+    if (Array.isArray(saved)) return saved.filter(p => p && p.name && Number.isInteger(+p.year) && p.year >= 1900 && p.year <= THIS_YEAR).slice(0, MAX_PEOPLE).map(p => ({ name: String(p.name).slice(0, 24), year: +p.year, st: isState(p.st) ? p.st : '' }));
   } catch (e) { /* storage blocked or bad data */ }
-  useExamples();
+  return [];
+}
+// Leave a shared link without saving its people: drop it from the address and show what's saved here (or the examples).
+function leaveLink(){
+  fromLink = false;
+  try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+  load(); renderAll(true);
 }
 function useExamples(){
   people = EXAMPLES.map(p => Object.assign({ id: uid++ }, p));
@@ -766,7 +776,8 @@ function renderPeople(){
   const box = $('#people');
   let h = people.map(p => '<button class="chip" type="button" data-id="' + p.id + '" aria-label="Edit ' + esc(p.name) + '"><span class="sw" style="background:' + colorOf(p) + '"></span>' + esc(p.name) + ' <small>' + p.year + (p.st ? ' · ' + p.st : '') + '</small></button>').join('');
   h += '<button class="chip add" type="button" id="add"' + (people.length >= MAX_PEOPLE ? ' disabled' : '') + '>+ Add a person</button>';
-  if (fromLink) h += '<div class="people-note">Opened from a shared link. Any change you make is saved on this device.</div>';
+  if (fromLink) h += '<div class="people-note"><span>Opened from a shared link. Changing anything replaces the lifelines saved on this device.</span>' +
+    (savedPeople().length ? '<button class="btn quiet" type="button" id="mine">Back to mine</button>' : '') + '</div>';
   else if (people.length >= MAX_PEOPLE) h += '<div class="people-note">Six people, six stripes. That’s the whole flag.</div>';
   box.innerHTML = h;
   $('#starter').hidden = !isExample;
@@ -1192,6 +1203,7 @@ $('#e-remove').addEventListener('click', () => {
 $('#people').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
   if (b.id === 'add') openEdit(null);
+  else if (b.id === 'mine') leaveLink();
   else { const p = people.find(x => x.id === +b.dataset.id); if (p) openEdit(p); }
 });
 $('#starter-form').addEventListener('submit', e => {
@@ -1223,8 +1235,8 @@ $('#years').addEventListener('click', e => {
   $('#lifelines').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
 });
 $('#reset').addEventListener('click', () => {
+  if (fromLink) { leaveLink(); return; }   // from a shared link, only drop the link: what's saved here stays
   try { localStorage.removeItem(STORE); } catch (e) {}
-  fromLink = false;
   try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
   useExamples(); renderAll(true);
 });

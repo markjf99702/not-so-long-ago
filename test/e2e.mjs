@@ -243,6 +243,45 @@ async function chipsSoon(p, expected) {
   await p.context().close();
 }
 
+// A shared link opened where people are already saved says plainly that changing anything replaces them.
+// Back to mine, and Start over, only drop the link: the saved people come back as they were.
+{
+  const STORE = 'not-so-long-ago.people.v1';
+  const mine = JSON.stringify([{ name: 'Dad', year: 1950, st: 'OH' }]);
+  const p = await freshPage();
+  const saved = () => p.evaluate(k => localStorage.getItem(k), STORE);
+  const openLink = async () => { await p.goto('about:blank'); await p.goto(base + '#p=Nana,1944,TX'); };
+  const backToMine = p.getByRole('button', { name: 'Back to mine' });
+  await p.evaluate(([k, v]) => localStorage.setItem(k, v), [STORE, mine]);
+  await openLink();
+  assert.deepEqual(await chipsOf(p), ['Nana 1944 · TX']);
+  assert.equal(await p.$eval('.people-note', el => el.firstChild.textContent), 'Opened from a shared link. Changing anything replaces the lifelines saved on this device.');
+  assert.equal(await backToMine.count(), 1, 'Back to mine should be offered');
+  await backToMine.click();
+  assert.deepEqual(await chipsOf(p), ['Dad 1950 · OH']);
+  assert.equal(await p.evaluate(() => location.hash), '', 'Back to mine should drop the link');
+  assert.equal(await saved(), mine);
+  assert.equal(await p.locator('.people-note').count(), 0);
+  await openLink();
+  await p.click('#reset');
+  assert.deepEqual(await chipsOf(p), ['Dad 1950 · OH'], 'Start over from a link should show what is saved');
+  assert.equal(await p.evaluate(() => location.hash), '');
+  assert.equal(await saved(), mine, 'Start over from a link deleted the saved people');
+  // Away from a link, Start over still clears what's saved.
+  await p.click('#reset');
+  assert.deepEqual(await chipsOf(p), ['Nana 1944 · TX', 'Mom 1970 · OH', 'Sam 2001 · CA']);
+  assert.equal(await saved(), null);
+  // With nobody saved there's nothing to go back to, and Start over shows the examples.
+  await openLink();
+  assert.equal(await backToMine.count(), 0, 'Back to mine with nobody saved');
+  await p.click('#reset');
+  assert.deepEqual(await chipsOf(p), ['Nana 1944 · TX', 'Mom 1970 · OH', 'Sam 2001 · CA']);
+  await p.evaluate(k => localStorage.setItem(k, JSON.stringify([{ name: 'Old', year: 1850 }])), STORE);
+  await openLink();
+  assert.equal(await backToMine.count(), 0, 'Back to mine when what is saved is nobody the page can show');
+  await p.context().close();
+}
+
 // The dialog's red text (its error line and Remove) is readable on the dialog in both palettes,
 // including a dark theme set on the page (as the Artifact viewer does) rather than by the system.
 for (const [scheme, theme] of [['light', ''], ['dark', ''], ['light', 'dark']]) {
