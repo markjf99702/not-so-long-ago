@@ -151,24 +151,28 @@ assert.ok(await page.title(), 'the page did not load offline');
 await ctx.setOffline(false);
 
 // The tools at junkdrawer.works/... share one address, so they share one store of offline copies.
-// Setting up this one's copy clears out its own older copies and leaves another tool's alone.
+// Setting up this one's copy clears out its own older copies and leaves other tools' alone, even one whose name starts with this one's.
 {
   const c = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, hasTouch: true });
   const p = await c.newPage();
   p.on('pageerror', e => problems.push(e.message));
   p.on('console', m => { if (m.type() === 'error') problems.push(m.text()); });
-  // Another tool on the same address made its copy first, and so did an older version of this one.
+  // Two other tools on the same address made their copies first, one of them called not-so-long-ago-x, and so did an older version of this one.
   await c.route(base + 'another-tool/', r => r.fulfill({ contentType: 'text/html', body: '<!doctype html><title>Another tool</title>' }));
   await p.goto(base + 'another-tool/');
   await p.evaluate(async () => {
     await (await caches.open('another-tool-v1')).put('/another-tool/', new Response('another tool'));
+    await (await caches.open('not-so-long-ago-x-v1')).put('/not-so-long-ago-x/', new Response('a tool whose name starts with this one\'s'));
     await (await caches.open('not-so-long-ago-v0')).put('/', new Response('an older version'));
   });
   await c.unroute(base + 'another-tool/');
   await p.goto(base);
   await p.waitForFunction(() => navigator.serviceWorker.controller?.state === 'activated', null, { timeout: 30000 });
-  const kept = await p.evaluate(async () => ({ keys: await caches.keys(), other: await caches.has('another-tool-v1'), old: await caches.has('not-so-long-ago-v0') }));
+  const kept = await p.evaluate(async () => ({
+    keys: await caches.keys(), other: await caches.has('another-tool-v1'), longer: await caches.has('not-so-long-ago-x-v1'), old: await caches.has('not-so-long-ago-v0'),
+  }));
   assert.equal(kept.other, true, 'another tool\'s offline copy was deleted; left: ' + kept.keys);
+  assert.equal(kept.longer, true, 'the offline copy of a tool whose name starts with this one\'s was deleted; left: ' + kept.keys);
   assert.equal(kept.old, false, 'an older version\'s offline copy was kept; left: ' + kept.keys);
   await c.close();
 }

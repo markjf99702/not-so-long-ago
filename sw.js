@@ -15,9 +15,10 @@ self.addEventListener('install', e => {
 });
 
 // Other tools at junkdrawer.works share this address, and so these caches: clear out only this one's old copies.
+// Match the whole name, so a tool whose name starts with this one's (not-so-long-ago-x-v1) keeps its copy.
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys()
-    .then(keys => Promise.all(keys.filter(k => k.startsWith('not-so-long-ago-') && k !== CACHE).map(k => caches.delete(k))))
+    .then(keys => Promise.all(keys.filter(k => k !== CACHE && /^not-so-long-ago-v[0-9]+$/.test(k)).map(k => caches.delete(k))))
     .then(() => self.clients.claim()));
 });
 
